@@ -31,11 +31,6 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch cars when filters change
-  useEffect(() => {
-    fetchCars();
-  }, []);
-
   const fetchCars = async () => {
     setLoading(true);
     setError('');
@@ -63,6 +58,11 @@ export default function SearchPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCars();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFilterChange = (field: string, value: string) => {
     setFilters({ ...filters, [field]: value });
