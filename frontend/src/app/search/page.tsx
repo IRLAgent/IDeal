@@ -1,7 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IRISH_COUNTIES } from '@/constants/counties';
+import { apiCall } from '@/lib/api';
+
+interface Car {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  fuelType: string;
+  location: string;
+  description: string;
+  photoUrls: string[];
+  createdAt: string;
+}
 
 export default function SearchPage() {
   const [filters, setFilters] = useState({
@@ -12,9 +27,49 @@ export default function SearchPage() {
     location: '',
     fuelType: '',
   });
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Fetch cars when filters change
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
+  const fetchCars = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      // Build query string from filters
+      const params = new URLSearchParams();
+      if (filters.make) params.append('make', filters.make);
+      if (filters.model) params.append('model', filters.model);
+      if (filters.priceMin) params.append('minPrice', filters.priceMin);
+      if (filters.priceMax) params.append('maxPrice', filters.priceMax);
+      if (filters.location) params.append('location', filters.location);
+      if (filters.fuelType) params.append('fuelType', filters.fuelType);
+
+      const response = await apiCall<{ cars: Car[] }>(`/cars?${params.toString()}`, {
+        method: 'GET',
+      });
+
+      setCars(response.cars);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load cars';
+      setError(errorMessage);
+      setCars([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFilterChange = (field: string, value: string) => {
     setFilters({ ...filters, [field]: value });
+  };
+
+  const handleApplyFilters = () => {
+    fetchCars();
   };
 
   return (
@@ -92,7 +147,7 @@ export default function SearchPage() {
                 </select>
               </div>
 
-              <button className="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">
+              <button onClick={handleApplyFilters} className="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">
                 Apply Filters
               </button>
             </div>
@@ -102,43 +157,54 @@ export default function SearchPage() {
         {/* Results */}
         <div className="lg:col-span-3">
           <div className="mb-6 flex justify-between items-center">
-            <h1 className="text-3xl font-bold">Search Results</h1>
-            <select className="p-2 border border-gray-300 rounded">
-              <option>Newest First</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Mileage: Low to High</option>
-            </select>
+            <h1 className="text-3xl font-bold">
+              Search Results {cars.length > 0 && `(${cars.length})`}
+            </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div key={item} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
-                <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-lg mb-2">2020 BMW 3 Series</h3>
-                  <p className="text-gray-600 mb-2">45,000 km • Dublin</p>
-                  <p className="text-2xl font-bold text-blue-600 mb-4">€22,990</p>
-                  <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">
-                    View Details
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          {error && (
+            <div className="bg-red-100 text-red-700 p-4 rounded mb-6">
+              {error}
+            </div>
+          )}
 
-          {/* Pagination */}
-          <div className="mt-8 flex justify-center gap-2">
-            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">← Previous</button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded">1</button>
-            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">2</button>
-            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">3</button>
-            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">Next →</button>
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Loading cars...</p>
+            </div>
+          ) : cars.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No cars found. Try adjusting your filters.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cars.map((car) => (
+                <div key={car.id} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
+                  <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
+                    {car.photoUrls && car.photoUrls.length > 0 ? (
+                      <img src={car.photoUrls[0]} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover" />
+                    ) : (
+                      <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">
+                      {car.year} {car.make} {car.model}
+                    </h3>
+                    <p className="text-gray-600 mb-2">
+                      {car.mileage.toLocaleString()} km • {car.location}
+                    </p>
+                    <p className="text-2xl font-bold text-blue-600 mb-4">€{car.price.toLocaleString()}</p>
+                    <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>
