@@ -67,8 +67,8 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Beautiful BMW 3 Series in excellent condition. Full service history, recently serviced. Leather interior, navigation system, parking sensors. A real gem for the serious buyer.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
-      'https://images.unsplash.com/photo-1554744512-d2c14487f7f1?w=800',
+      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&q=80&fm=jpg',
+      'https://images.unsplash.com/photo-1554744512-d2c14487f7f1?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -83,7 +83,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Reliable Ford Focus, perfect for daily commute. Good fuel economy, well-maintained by previous owner. New tyres and battery. MOT valid until 2025.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
+      'https://images.unsplash.com/photo-1535732066927-ab7c9ab60908?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -98,7 +98,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Premium Audi A4 with stunning design and performance. Nearly new condition, only 28k miles. Complete Audi service history. Virtual cockpit, panoramic sunroof, adaptive cruise control.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -113,7 +113,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Solid VW Golf, fun to drive with responsive steering. Good condition, regular maintenance. Perfect first car or reliable runabout. Tax and MOT included.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
+      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -128,7 +128,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Luxury Mercedes C-Class in stunning black. Premium comfort and technology. Heated seats, keyless entry, DAB radio, reversing camera. A steal at this price!',
     photoUrls: [
-      'https://images.unsplash.com/photo-1549399542-7e3f8b83ad38?w=800',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b83ad38?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -143,7 +143,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Budget-friendly Toyota Yaris. Extremely reliable and economical. Perfect for city driving. Air conditioning, power steering, ABS brakes. No surprises, just honest motoring.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
+      'https://images.unsplash.com/photo-1579824343991-34c6eca3a0d1?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -158,7 +158,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Modern Hyundai i30 with great warranty coverage remaining. Stylish design with practical features. USB connectivity, touchscreen display, alloy wheels. Great value proposition.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
+      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800&q=80&fm=jpg',
     ],
   },
   {
@@ -173,7 +173,7 @@ const TEST_CARS: SeedCar[] = [
     description:
       'Attractive Peugeot 308 with smooth diesel engine. Recently had major service including new brake pads. Tinted windows, alloys, cruise control. Economical and fun.',
     photoUrls: [
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800',
+      'https://images.unsplash.com/photo-1553882900-f2b06423ff1d?w=800&q=80&fm=jpg',
     ],
   },
 ];
