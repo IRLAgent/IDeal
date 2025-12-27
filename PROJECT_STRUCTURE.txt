@@ -1,0 +1,184 @@
+📁 carmarket-ie/
+│
+├── 📄 .gitignore                   # Git ignore rules
+├── 📄 README.md                    # Project overview
+├── 📄 SETUP.md                     # Setup & installation guide
+├── 📄 GETTING_STARTED.md          # Quick start guide (READ THIS FIRST!)
+├── 📄 API.md                       # API documentation
+├── 📄 CHECKLIST.md                 # Development checklist
+├── 📄 start.bat                    # Windows quick start script
+├── 📄 start.sh                     # Mac/Linux quick start script
+│
+├── 📁 frontend/                    # Next.js React App
+│   ├── 📄 package.json             # Dependencies & scripts
+│   ├── 📄 tsconfig.json            # TypeScript config
+│   ├── 📄 next.config.js           # Next.js config
+│   ├── 📄 tailwind.config.js       # Tailwind CSS config
+│   ├── 📄 postcss.config.js        # PostCSS config
+│   ├── 📄 .eslintrc.json           # ESLint config
+│   │
+│   ├── 📁 public/                  # Static files
+│   │
+│   └── 📁 src/
+│       ├── 📁 app/                 # Next.js App Router
+│       │   ├── 📄 layout.tsx       # Root layout (header/footer)
+│       │   ├── 📄 page.tsx         # Homepage
+│       │   ├── 📄 globals.css      # Global styles
+│       │   │
+│       │   ├── 📁 auth/            # Authentication pages
+│       │   │   ├── 📁 login/
+│       │   │   │   └── 📄 page.tsx # Login page
+│       │   │   └── 📁 signup/
+│       │   │       └── 📄 page.tsx # Signup page
+│       │   │
+│       │   ├── 📁 search/          # Search results
+│       │   │   └── 📄 page.tsx     # Search page
+│       │   │
+│       │   ├── 📁 listing/         # Listing details
+│       │   │   └── 📁 [id]/
+│       │   │       └── 📄 page.tsx # Listing detail page
+│       │   │
+│       │   └── 📁 dashboard/       # Seller dashboard
+│       │       └── 📄 page.tsx     # Dashboard page
+│       │
+│       └── 📁 components/          # Reusable components
+│           └── (components go here)
+│
+└── 📁 backend/                     # Express.js API
+    ├── 📄 package.json             # Dependencies & scripts
+    ├── 📄 tsconfig.json            # TypeScript config
+    ├── 📄 .env                     # Environment variables
+    │
+    ├── 📁 prisma/
+    │   └── 📄 schema.prisma        # Database schema
+    │
+    └── 📁 src/
+        ├── 📄 index.ts             # Main server file
+        │
+        ├── 📁 routes/              # API routes
+        │   ├── 📄 auth.ts          # POST /auth/register, /auth/login
+        │   ├── 📄 cars.ts          # GET/POST/PUT/DELETE /cars
+        │   └── 📄 messages.ts      # GET/POST /messages
+        │
+        ├── 📁 controllers/         # Business logic
+        │   ├── 📄 auth.ts          # Auth functions
+        │   ├── 📄 car.ts           # Car CRUD functions
+        │   └── 📄 message.ts       # Message functions
+        │
+        ├── 📁 middleware/          # Express middleware
+        │   └── 📄 auth.ts          # JWT auth middleware
+        │
+        └── 📁 models/              # Data models
+            ├── 📄 user.ts
+            └── 📄 car.ts
+
+
+═══════════════════════════════════════════════════════════════
+
+FRONTEND PAGES:
+
+/                      Homepage (search, featured listings)
+/auth/signup          Signup/registration page
+/auth/login           Login page
+/search               Search results with filters
+/listing/:id          Individual car listing detail
+/dashboard            Seller dashboard
+
+═══════════════════════════════════════════════════════════════
+
+BACKEND API ROUTES:
+
+POST   /api/auth/register           Register new user
+POST   /api/auth/login              Login user
+
+GET    /api/cars                    List all cars (with filters)
+GET    /api/cars/:id                Get single car
+POST   /api/cars                    Create new listing (auth required)
+PUT    /api/cars/:id                Update listing (auth required)
+DELETE /api/cars/:id                Delete listing (auth required)
+GET    /api/cars/user/listings      Get user's listings (auth required)
+
+POST   /api/messages                Send message (auth required)
+GET    /api/messages                Get messages (auth required)
+GET    /api/messages/:userId        Get conversation (auth required)
+PATCH  /api/messages/:id/read       Mark as read (auth required)
+
+═══════════════════════════════════════════════════════════════
+
+DATABASE SCHEMA (Prisma):
+
+User
+├── id (String, primary)
+├── email (String, unique)
+├── password (String, hashed)
+├── name (String)
+├── phone (String, optional)
+├── location (String, optional)
+├── sellerType (String: "private" | "dealer")
+├── createdAt (DateTime)
+├── updatedAt (DateTime)
+└── relations: cars, sentMessages, receivedMessages, inquiries
+
+Car
+├── id (String, primary)
+├── userId (String, foreign)
+├── make (String)
+├── model (String)
+├── year (Int)
+├── price (Int)
+├── mileage (Int)
+├── fuelType (String: "Petrol" | "Diesel" | "Hybrid" | "Electric")
+├── transmission (String: "Manual" | "Automatic")
+├── description (Text)
+├── photoUrls (String[], array)
+├── status (String: "active" | "sold" | "draft")
+├── createdAt (DateTime)
+├── updatedAt (DateTime)
+└── relations: user, messages, inquiries
+
+Message
+├── id (String, primary)
+├── fromUserId (String, foreign)
+├── toUserId (String, foreign)
+├── carId (String, foreign, optional)
+├── messageText (Text)
+├── read (Boolean, default: false)
+├── createdAt (DateTime)
+└── relations: fromUser, toUser, car
+
+Inquiry
+├── id (String, primary)
+├── userId (String, foreign)
+├── carId (String, foreign)
+├── status (String: "new" | "responded" | "closed")
+├── createdAt (DateTime)
+├── updatedAt (DateTime)
+└── relations: user, car
+
+═══════════════════════════════════════════════════════════════
+
+KEY FILES TO KNOW:
+
+frontend/src/app/page.tsx              Homepage - START HERE for frontend
+frontend/src/app/auth/login/page.tsx   Login form example
+frontend/src/app/search/page.tsx       Search with filters example
+
+backend/src/index.ts                   Main server - START HERE for backend
+backend/src/routes/auth.ts             Auth endpoints (register, login)
+backend/src/routes/cars.ts             Car endpoints
+backend/src/routes/messages.ts         Message endpoints
+backend/prisma/schema.prisma           Database schema
+
+═══════════════════════════════════════════════════════════════
+
+GETTING STARTED:
+
+1. cd frontend && npm install
+2. cd ../backend && npm install
+3. Set up database (PostgreSQL or Railway)
+4. npm run prisma:migrate
+5. Terminal 1: cd frontend && npm run dev
+6. Terminal 2: cd backend && npm run dev
+7. Visit http://localhost:3000
+
+═══════════════════════════════════════════════════════════════

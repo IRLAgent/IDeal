@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  password      String
+  name          String
+  phone         String?
+  location      String?
+  sellerType    String     @default("private") // "private" or "dealer"
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  cars          Car[]
+  sentMessages  Message[]  @relation("from")
+  receivedMessages Message[] @relation("to")
+  inquiries     Inquiry[]
+
+  @@map("users")
+}
+
+model Car {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  make          String
+  model         String
+  year          Int
+  price         Int
+  mileage       Int
+  fuelType      String     // "Petrol", "Diesel", "Hybrid", "Electric"
+  transmission  String     // "Manual", "Automatic"
+  description   String
+  photoUrls     String     @default("[]")  // JSON string array of photo URLs
+  status        String     @default("active") // "active", "sold", "draft"
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  messages      Message[]
+  inquiries     Inquiry[]
+
+  @@map("cars")
+}
+
+model Message {
+  id            String     @id @default(cuid())
+  fromUserId    String
+  toUserId      String
+  carId         String?
+
+  fromUser      User       @relation("from", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser        User       @relation("to", fields: [toUserId], references: [id], onDelete: Cascade)
+  car           Car?       @relation(fields: [carId], references: [id], onDelete: SetNull)
+
+  messageText   String
+  read          Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+
+  @@map("messages")
+}
+
+model Inquiry {
+  id            String     @id @default(cuid())
+  userId        String
+  carId         String
+  status        String     @default("new") // "new", "responded", "closed"
+
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  car           Car        @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("inquiries")
+}
