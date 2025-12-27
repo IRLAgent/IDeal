@@ -1,7 +1,7 @@
 #!/bin/bash
-# Run Prisma migrations before starting the app
-echo "Running database migrations..."
-npx prisma migrate deploy || echo "Warning: Database migration failed, but app will attempt to start"
+# Ensure database schema is up to date
+echo "Syncing database schema..."
+npx prisma db push --skip-generate || echo "Warning: Database sync failed, but app will attempt to start"
 
 # Start the app
 echo "Starting application..."
