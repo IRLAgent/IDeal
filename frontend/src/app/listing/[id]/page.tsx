@@ -1,27 +1,115 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { apiCall, apiCallAuth } from '@/lib/api';
+import { getAuthToken, getUser } from '@/lib/auth';
+
+interface Car {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  fuelType: string;
+  transmission?: string;
+  location: string;
+  description: string;
+  photoUrls: string[];
+  createdAt: string;
+  userId: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export default function ListingPage({ params }: { params: { id: string } }) {
-  const [_listing, _setListing] = useState<any>(null);
+  const [listing, setListing] = useState<Car | null>(null);
+  const [seller, setSeller] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [messageText, setMessageText] = useState('');
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [messageError, setMessageError] = useState('');
+  const [messageSuccess, setMessageSuccess] = useState(false);
+  const currentUser = getUser();
 
   useEffect(() => {
-    // TODO: Fetch listing from API
-    console.log('Fetching listing:', params.id);
-    setLoading(false);
+    fetchListing();
   }, [params.id]);
 
-  const handleMessage = (e: React.FormEvent) => {
+  const fetchListing = async () => {
+    setLoading(true);
+    try {
+      const response = await apiCall<Car>(`/cars/${params.id}`, { method: 'GET' });
+      setListing(response);
+      // TODO: Fetch seller details from API
+      setSeller({ id: response.userId, name: 'John Doe', email: 'john@example.com' });
+    } catch (err) {
+      console.error('Failed to load listing');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Send message via API
-    console.log('Sending message:', message);
-    setMessage('');
+    if (!messageText.trim()) return;
+
+    setSendingMessage(true);
+    setMessageError('');
+    setMessageSuccess(false);
+
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        setMessageError('Please log in to send a message');
+        return;
+      }
+
+      await apiCallAuth(
+        '/messages',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            carId: params.id,
+            recipientId: listing?.userId,
+            content: messageText,
+          }),
+        },
+        token
+      );
+
+      setMessageSuccess(true);
+      setMessageText('');
+      setTimeout(() => setMessageSuccess(false), 3000);
+    } catch (err) {
+      setMessageError(err instanceof Error ? err.message : 'Failed to send message');
+    } finally {
+      setSendingMessage(false);
+    }
   };
 
   if (loading) {
-    return <main><div className="text-center py-12">Loading...</div></main>;
+    return (
+      <main>
+        <div className="text-center py-12">
+          <p className="text-gray-600">Loading listing...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!listing) {
+    return (
+      <main>
+        <div className="text-center py-12">
+          <p className="text-red-600">Listing not found</p>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -31,22 +119,34 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-2">
           {/* Gallery */}
           <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
-            <div className="w-full h-96 bg-gray-300 flex items-center justify-center mb-4">
-              <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-              </svg>
+            <div className="w-full h-96 bg-gray-300 flex items-center justify-center mb-4 overflow-hidden">
+              {listing.photoUrls && listing.photoUrls.length > 0 ? (
+                <img src={listing.photoUrls[0]} alt={`${listing.make} ${listing.model}`} className="w-full h-full object-cover" />
+              ) : (
+                <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                </svg>
+              )}
             </div>
-            <div className="flex gap-2 p-4 overflow-x-auto">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-20 h-20 bg-gray-300 rounded flex-shrink-0 cursor-pointer hover:opacity-70"></div>
-              ))}
-            </div>
+            {listing.photoUrls && listing.photoUrls.length > 0 && (
+              <div className="flex gap-2 p-4 overflow-x-auto">
+                {listing.photoUrls.map((url, i) => (
+                  <div key={i} className="w-20 h-20 bg-gray-300 rounded flex-shrink-0 cursor-pointer hover:opacity-70 overflow-hidden">
+                    <img src={url} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Specs */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h1 className="text-3xl font-bold mb-2">2020 BMW 3 Series</h1>
-            <p className="text-gray-600 mb-6">45,000 km • Petrol • Manual • Dublin</p>
+            <h1 className="text-3xl font-bold mb-2">
+              {listing.year} {listing.make} {listing.model}
+            </h1>
+            <p className="text-gray-600 mb-6">
+              {listing.mileage.toLocaleString()} km • {listing.fuelType} • {listing.transmission || 'Manual'} • {listing.location}
+            </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
@@ -80,7 +180,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-1">
           {/* Price Card */}
           <div className="bg-white rounded-lg shadow p-6 mb-6 sticky top-24">
-            <p className="text-4xl font-bold text-blue-600 mb-4">€22,990</p>
+            <p className="text-4xl font-bold text-blue-600 mb-4">€{listing.price.toLocaleString()}</p>
 
             <button className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 mb-3">
               Call Seller
@@ -94,10 +194,10 @@ export default function ListingPage({ params }: { params: { id: string } }) {
               <h3 className="font-bold text-lg mb-4">Seller Details</h3>
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
-                  JD
+                  {seller?.name.charAt(0) || 'J'}
                 </div>
                 <div className="ml-3">
-                  <p className="font-bold">John Doe</p>
+                  <p className="font-bold">{seller?.name || 'Seller'}</p>
                   <p className="text-sm text-gray-600">Private Seller</p>
                 </div>
               </div>
@@ -112,21 +212,41 @@ export default function ListingPage({ params }: { params: { id: string } }) {
             {/* Message Form */}
             <div className="border-t pt-6 mt-6">
               <h3 className="font-bold text-lg mb-4">Send Message</h3>
-              <form onSubmit={handleMessage} className="space-y-3">
-                <textarea
-                  placeholder="Hi, I'm interested in this car..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none h-24"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-green-600 text-white p-3 rounded font-bold hover:bg-green-700"
-                >
-                  Send Message
-                </button>
-              </form>
+              
+              {messageSuccess && (
+                <div className="bg-green-100 text-green-700 p-3 rounded mb-3 text-sm">
+                  Message sent successfully!
+                </div>
+              )}
+
+              {messageError && (
+                <div className="bg-red-100 text-red-700 p-3 rounded mb-3 text-sm">
+                  {messageError}
+                </div>
+              )}
+
+              {!currentUser ? (
+                <p className="text-gray-600 text-sm mb-3">
+                  <a href="/auth/login" className="text-blue-600 font-bold">Log in</a> to send a message
+                </p>
+              ) : (
+                <form onSubmit={handleSendMessage} className="space-y-3">
+                  <textarea
+                    placeholder="Hi, I'm interested in this car..."
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none h-24"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={sendingMessage}
+                    className="w-full bg-green-600 text-white p-3 rounded font-bold hover:bg-green-700 disabled:bg-gray-400"
+                  >
+                    {sendingMessage ? 'Sending...' : 'Send Message'}
+                  </button>
+                </form>
+              )}
             </div>
 
             {/* Report Listing */}
