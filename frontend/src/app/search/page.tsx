@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { IRISH_COUNTIES } from '@/constants/counties';
 
 export default function SearchPage() {
   const [filters, setFilters] = useState({
@@ -77,13 +78,18 @@ export default function SearchPage() {
 
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Location</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Dublin"
+                <select
                   value={filters.location}
                   onChange={(e) => handleFilterChange('location', e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
-                />
+                >
+                  <option value="">All Counties</option>
+                  {IRISH_COUNTIES.map((county) => (
+                    <option key={county} value={county}>
+                      {county}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <button className="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">

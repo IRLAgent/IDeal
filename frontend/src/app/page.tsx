@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { IRISH_COUNTIES } from '@/constants/counties';
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
@@ -51,13 +52,18 @@ export default function Home() {
               onChange={(e) => setSearchParams({ ...searchParams, maxPrice: e.target.value })}
               className="input-field"
             />
-            <input
-              type="text"
-              placeholder="Location"
+            <select
               value={searchParams.location}
               onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
               className="input-field"
-            />
+            >
+              <option value="">Select County</option>
+              {IRISH_COUNTIES.map((county) => (
+                <option key={county} value={county}>
+                  {county}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             type="submit"
