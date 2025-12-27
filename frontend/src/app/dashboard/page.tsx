@@ -90,7 +90,7 @@ export default function DashboardPage() {
 
           {listings.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-12 text-center">
-              <p className="text-gray-600 mb-4">You haven't created any listings yet</p>
+              <p className="text-gray-600 mb-4">You haven&apos;t created any listings yet</p>
               <a href="/sell" className="text-blue-600 font-bold hover:underline">
                 Create Your First Listing
               </a>
