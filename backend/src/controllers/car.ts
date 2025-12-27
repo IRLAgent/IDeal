@@ -11,6 +11,7 @@ export class CarController {
       year: number;
       price: number;
       mileage: number;
+      location: string;
       fuelType: string;
       transmission: string;
       description: string;
@@ -32,6 +33,7 @@ export class CarController {
     priceMin?: number;
     priceMax?: number;
     location?: string;
+    fuelType?: string;
     skip?: number;
     take?: number;
   }) {
@@ -47,6 +49,8 @@ export class CarController {
           gte: filters?.priceMin || 0,
           lte: filters?.priceMax || 999999,
         },
+        location: filters?.location ? { contains: filters.location } : undefined,
+        fuelType: filters?.fuelType ? { contains: filters.fuelType } : undefined,
       },
       include: { user: true },
       skip,

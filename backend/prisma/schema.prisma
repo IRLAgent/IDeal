@@ -39,6 +39,7 @@ model Car {
   year          Int
   price         Int
   mileage       Int
+  location      String
   fuelType      String     // "Petrol", "Diesel", "Hybrid", "Electric"
   transmission  String     // "Manual", "Automatic"
   description   String

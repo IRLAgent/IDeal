@@ -7,16 +7,24 @@ const router = Router();
 // Get all cars (public)
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
-    const { make, model, priceMin, priceMax, skip, take } = req.query;
+    const { make, model, priceMin, priceMax, location, fuelType, skip, take } = req.query;
     const cars = await CarController.getCars({
       make: make as string,
       model: model as string,
       priceMin: priceMin ? parseInt(priceMin as string) : undefined,
       priceMax: priceMax ? parseInt(priceMax as string) : undefined,
+      location: location as string,
       skip: skip ? parseInt(skip as string) : 0,
       take: take ? parseInt(take as string) : 20,
     });
-    res.json(cars);
+
+    // Parse photoUrls JSON strings and filter out incomplete data
+    const parsedCars = cars.map((car: any) => ({
+      ...car,
+      photoUrls: typeof car.photoUrls === 'string' ? JSON.parse(car.photoUrls) : car.photoUrls || [],
+    }));
+
+    res.json({ cars: parsedCars });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -29,7 +37,14 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
     if (!car) {
       return res.status(404).json({ error: 'Car not found' });
     }
-    res.json(car);
+
+    // Parse photoUrls JSON string
+    const parsedCar = {
+      ...car,
+      photoUrls: typeof car.photoUrls === 'string' ? JSON.parse(car.photoUrls) : car.photoUrls || [],
+    };
+
+    res.json(parsedCar);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -38,9 +53,9 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
 // Create car (authenticated)
 router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
-    const { make, model, year, price, mileage, fuelType, transmission, description, photoUrls } = req.body;
+    const { make, model, year, price, mileage, location, fuelType, transmission, description, photoUrls } = req.body;
 
-    if (!make || !model || !year || !price) {
+    if (!make || !model || !year || !price || !location) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -50,6 +65,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
       year,
       price,
       mileage,
+      location,
       fuelType,
       transmission,
       description,
@@ -58,6 +74,20 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     res.status(201).json(car);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Get user's cars
+router.get('/user/listings', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const cars = await CarController.getUserCars(req.userId!);
+    const parsedCars = cars.map((car: any) => ({
+      ...car,
+      photoUrls: typeof car.photoUrls === 'string' ? JSON.parse(car.photoUrls) : car.photoUrls || [],
+    }));
+    res.json({ cars: parsedCars });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 
