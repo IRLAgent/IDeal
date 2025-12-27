@@ -43,20 +43,20 @@ export default function SearchPage() {
 
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Price Range</label>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <input
                     type="number"
                     placeholder="Min"
                     value={filters.priceMin}
                     onChange={(e) => handleFilterChange('priceMin', e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded text-sm"
                   />
                   <input
                     type="number"
                     placeholder="Max"
                     value={filters.priceMax}
                     onChange={(e) => handleFilterChange('priceMax', e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded text-sm"
                   />
                 </div>
               </div>
