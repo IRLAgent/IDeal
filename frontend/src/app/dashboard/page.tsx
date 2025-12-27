@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('listings');
-  const [listings, setListings] = useState<any[]>([]);
+  const [listings, _setListings] = useState<any[]>([]);
   const [stats, setStats] = useState({
     totalViews: 0,
     totalMessages: 0,
