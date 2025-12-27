@@ -1,4 +1,4 @@
-# ✅ CarMarket.ie - Project Creation Summary
+# ✅ IDeal.ie - Project Creation Summary
 
 ## 🎉 SUCCESS! Your project has been fully created.
 
@@ -433,7 +433,7 @@ npm run dev
 
 ---
 
-**Project**: CarMarket.ie - Car Marketplace
+**Project**: IDeal.ie - Car Marketplace
 **Status**: ✅ Complete & Ready
 **Created**: December 27, 2025
 **Phase**: MVP Foundation (Phase 1/9)

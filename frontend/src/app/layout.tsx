@@ -6,7 +6,7 @@ import MobileMenu from "@/components/MobileMenu";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CarMarket.ie - Buy & Sell Cars in Ireland",
+  title: "IDeal.ie - Buy & Sell Cars in Ireland",
   description: "Ireland's new car marketplace for buying and selling vehicles",
 };
 
@@ -73,7 +73,7 @@ export default function RootLayout({
               </div>
             </div>
             <div className="border-t border-purple-700 pt-8">
-              <p className="text-center text-gray-400">&copy; 2025 IDeal. All rights reserved.</p>
+              <p className="text-center text-gray-400">&copy; 2025 IDeal.ie. All rights reserved.</p>
             </div>
           </div>
         </footer>

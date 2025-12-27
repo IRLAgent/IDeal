@@ -1,11 +1,11 @@
-# CarMarket.ie - Car Marketplace
+# IDeal.ie - Car Marketplace
 
 A responsive car marketplace for buying and selling vehicles in Ireland.
 
 ## Project Structure
 
 ```
-carmarket-ie/
+ideal/
 ├── frontend/        # Next.js React app
 ├── backend/         # Express.js API
 └── docs/           # Documentation

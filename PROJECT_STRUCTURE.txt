@@ -1,4 +1,4 @@
-📁 carmarket-ie/
+📁 ideal/
 │
 ├── 📄 .gitignore                   # Git ignore rules
 ├── 📄 README.md                    # Project overview

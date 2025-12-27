@@ -1,9 +1,9 @@
 #!/bin/bash
-# CarMarket.ie - Quick Start Script for Linux/Mac
+# IDeal.ie - Quick Start Script for Linux/Mac
 
 echo ""
 echo "╔════════════════════════════════════════╗"
-echo "║   CarMarket.ie Quick Start             ║"
+echo "║   IDeal.ie Quick Start                 ║"
 echo "║   Car Marketplace for Ireland          ║"
 echo "╚════════════════════════════════════════╝"
 echo ""

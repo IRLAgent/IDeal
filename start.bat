@@ -1,9 +1,9 @@
 @echo off
-REM CarMarket.ie - Quick Start Script for Windows
+REM IDeal.ie - Quick Start Script for Windows
 
 echo.
 echo ╔════════════════════════════════════════╗
-echo ║   CarMarket.ie Quick Start             ║
+echo ║   IDeal.ie Quick Start                 ║
 echo ║   Car Marketplace for Ireland          ║
 echo ╚════════════════════════════════════════╝
 echo.
@@ -69,10 +69,10 @@ if "%choice%"=="1" (
     echo.
     echo You need TWO terminal windows for this.
     echo Opening frontend terminal...
-    start "CarMarket Frontend" powershell -NoExit -Command "cd frontend; npm run dev"
+    start "IDeal Frontend" powershell -NoExit -Command "cd frontend; npm run dev"
     timeout /t 2 > nul
     echo Opening backend terminal...
-    start "CarMarket Backend" powershell -NoExit -Command "cd backend; npm run dev"
+    start "IDeal Backend" powershell -NoExit -Command "cd backend; npm run dev"
 ) else if "%choice%"=="5" (
     echo.
     echo Opening SETUP.md...

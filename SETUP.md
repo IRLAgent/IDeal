@@ -1,4 +1,4 @@
-# CarMarket.ie - Setup & Installation Guide
+# IDeal.ie - Setup & Installation Guide
 
 ## ✅ Project Created
 
