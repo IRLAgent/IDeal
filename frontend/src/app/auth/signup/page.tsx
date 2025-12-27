@@ -1,9 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { apiCall } from '@/lib/api';
+import { setAuthToken, AuthResponse } from '@/lib/auth';
 
 export default function SignupPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,17 +41,25 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // TODO: Call API to register
-      console.log('Signup attempt:', formData);
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // });
-      // if (!response.ok) throw new Error('Signup failed');
-      // Redirect to dashboard or login
+      const response = await apiCall<AuthResponse>('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          userType: formData.userType,
+        }),
+      });
+
+      // Store token and user info
+      setAuthToken(response.token, response.user);
+
+      // Redirect to dashboard
+      router.push('/dashboard');
     } catch (err) {
-      setError('Signup failed. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Signup failed. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -1,9 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { apiCall } from '@/lib/api';
+import { setAuthToken, AuthResponse } from '@/lib/auth';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,18 +19,19 @@ export default function LoginPage() {
     setError('');
 
     try {
-      // TODO: Call API to login
-      console.log('Login attempt:', { email, password });
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // if (!response.ok) throw new Error('Login failed');
-      // const data = await response.json();
-      // Store token and redirect
+      const response = await apiCall<AuthResponse>('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      // Store token and user info
+      setAuthToken(response.token, response.user);
+
+      // Redirect to dashboard
+      router.push('/dashboard');
     } catch (err) {
-      setError('Invalid email or password');
+      const errorMessage = err instanceof Error ? err.message : 'Invalid email or password';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
