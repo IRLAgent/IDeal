@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 export default function ListingPage({ params }: { params: { id: string } }) {
-  const [listing, setListing] = useState<any>(null);
+  const [_listing, _setListing] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
 
