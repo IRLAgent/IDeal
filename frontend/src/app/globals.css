@@ -45,15 +45,15 @@ main {
 }
 
 .btn-secondary {
-  @apply bg-primary-700 text-white px-4 py-2 rounded font-semibold hover:bg-primary-800 transition border border-primary-600;
+  @apply bg-purple-700 text-white px-4 py-2 rounded font-semibold hover:bg-purple-800 transition border border-purple-600;
 }
 
 .card {
-  @apply bg-dark-800 rounded-lg shadow-lg border border-primary-700 p-6;
+  @apply bg-dark-800 rounded-lg shadow-lg border border-purple-700 p-6;
 }
 
 .input-field {
-  @apply w-full px-4 py-2 rounded border border-primary-600 bg-dark-900 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition;
+  @apply w-full px-4 py-2 rounded border border-purple-600 bg-dark-900 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition;
 }
 
 /* Hero gradient background */
@@ -74,7 +74,7 @@ main {
 
 /* Dark card with gold border */
 .card-accent {
-  @apply bg-dark-800 rounded-lg shadow-lg border-2 border-amber-500 p-6;
+  @apply bg-gray-900 rounded-lg shadow-lg border-2 border-amber-500 p-6;
 }
 
 .card {

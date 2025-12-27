@@ -19,47 +19,49 @@ export default function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg p-8 md:p-12 mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Car</h1>
+      <section className="bg-gradient-primary text-white rounded-lg p-8 md:p-12 mb-12 border-2 border-amber-500">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-300 to-amber-400 bg-clip-text text-transparent">
+          Find Your Perfect Car
+        </h1>
         <p className="text-lg md:text-xl mb-8 opacity-90">
           Browse thousands of vehicles from trusted sellers across Ireland
         </p>
 
         {/* Search Form */}
-        <form onSubmit={handleSearch} className="bg-white text-gray-800 p-6 rounded-lg max-w-2xl">
+        <form onSubmit={handleSearch} className="bg-gray-900 text-gray-200 p-6 rounded-lg max-w-2xl border border-purple-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <input
               type="text"
               placeholder="Make (e.g., BMW, Ford)"
               value={searchParams.make}
               onChange={(e) => setSearchParams({ ...searchParams, make: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="input-field"
             />
             <input
               type="text"
               placeholder="Model (e.g., 3 Series)"
               value={searchParams.model}
               onChange={(e) => setSearchParams({ ...searchParams, model: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="input-field"
             />
             <input
               type="number"
               placeholder="Max Price (€)"
               value={searchParams.maxPrice}
               onChange={(e) => setSearchParams({ ...searchParams, maxPrice: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="input-field"
             />
             <input
               type="text"
               placeholder="Location"
               value={searchParams.location}
               onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="input-field"
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition"
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded font-bold hover:from-amber-600 hover:to-amber-700 transition shadow-lg"
           >
             Search Cars
           </button>
@@ -68,16 +70,16 @@ export default function Home() {
 
       {/* Quick Links Section */}
       <section className="mb-12">
-        <h2 className="text-3xl font-bold mb-8">Browse by Category</h2>
+        <h2 className="text-3xl font-bold mb-8 text-white">Browse by Category</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="card">
-            <h3 className="font-bold text-lg mb-2 text-blue-600">Used Cars</h3>
-            <p className="text-gray-600">Browse used vehicles from private sellers</p>
-            <a href="/search?type=used" className="text-blue-600 font-semibold mt-4 inline-block hover:underline">
+          <div className="card border-l-4 border-amber-500 hover:shadow-xl hover:shadow-amber-500/20 transition">
+            <h3 className="font-bold text-lg mb-2 text-amber-400">Used Cars</h3>
+            <p className="text-gray-400">Browse used vehicles from private sellers</p>
+            <a href="/search?type=used" className="text-amber-400 font-semibold mt-4 inline-block hover:text-amber-300 transition">
               View All →
             </a>
           </div>
-          <div className="card">
+          <div className="card border-l-4 border-amber-500 hover:shadow-xl hover:shadow-amber-500/20 transition">
             <h3 className="font-bold text-lg mb-2 text-blue-600">Dealer Cars</h3>
             <p className="text-gray-600">New and certified dealer inventory</p>
             <a href="/search?type=dealer" className="text-blue-600 font-semibold mt-4 inline-block hover:underline">
