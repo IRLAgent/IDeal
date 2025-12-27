@@ -11,7 +11,7 @@ export class CarController {
       year: number;
       price: number;
       mileage: number;
-      location: string;
+      location?: string;
       fuelType: string;
       transmission: string;
       description: string;

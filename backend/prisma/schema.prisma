@@ -39,7 +39,7 @@ model Car {
   year          Int
   price         Int
   mileage       Int
-  location      String
+  location      String?    @default("Unknown")
   fuelType      String     // "Petrol", "Diesel", "Hybrid", "Electric"
   transmission  String     // "Manual", "Automatic"
   description   String

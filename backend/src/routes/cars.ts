@@ -55,7 +55,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
     const { make, model, year, price, mileage, location, fuelType, transmission, description, photoUrls } = req.body;
 
-    if (!make || !model || !year || !price || !location) {
+    if (!make || !model || !year || !price) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
