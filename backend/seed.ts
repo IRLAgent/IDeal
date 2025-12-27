@@ -202,9 +202,9 @@ async function seedDatabase() {
 
       console.log(`  ✓ Created user: ${user.name}`);
     } catch (error: any) {
-      if (error.response?.data?.message?.includes('already exists')) {
-        console.log(`  ℹ User ${user.email} already exists`);
-        // Try to log in if user exists
+      // If registration fails (user likely exists), try to login
+      if (error.response?.status === 400) {
+        console.log(`  ℹ User ${user.email} already exists, attempting login...`);
         try {
           const loginResponse = await axios.post(`${API_URL}/auth/login`, {
             email: user.email,
