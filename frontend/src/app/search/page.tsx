@@ -30,6 +30,7 @@ export default function SearchPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(true);
 
   const fetchCars = async () => {
     setLoading(true);
@@ -70,6 +71,7 @@ export default function SearchPage() {
 
   const handleApplyFilters = () => {
     fetchCars();
+    setFiltersOpen(false);
   };
 
   return (
@@ -78,9 +80,27 @@ export default function SearchPage() {
         {/* Filters Sidebar */}
         <aside className="lg:col-span-1">
           <div className="bg-white p-6 rounded-lg shadow sticky top-24">
-            <h2 className="text-2xl font-bold mb-6">Filters</h2>
+            <div 
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              className="flex justify-between items-center mb-6 cursor-pointer lg:cursor-default hover:bg-gray-50 lg:hover:bg-transparent p-2 rounded transition lg:p-0"
+            >
+              <h2 className="text-2xl font-bold">Filters</h2>
+              <button
+                className="lg:hidden text-purple-900 hover:text-purple-950 transition"
+                aria-label="Toggle filters"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {filtersOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  )}
+                </svg>
+              </button>
+            </div>
 
-            <div className="space-y-4">
+            {filtersOpen && (
+              <div className="space-y-4">
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Make</label>
                 <select
@@ -151,6 +171,7 @@ export default function SearchPage() {
                 Apply Filters
               </button>
             </div>
+            )}
           </div>
         </aside>
 
@@ -177,7 +198,7 @@ export default function SearchPage() {
               <p className="text-gray-600">No cars found. Try adjusting your filters.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {cars.map((car) => (
                 <div key={car.id} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
                   <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
