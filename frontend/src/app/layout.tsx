@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MobileMenu from "@/components/MobileMenu";
+import HeaderNav from "@/components/HeaderNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,12 +24,7 @@ export default function RootLayout({
             <h1 className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">
               <a href="/" className="hover:opacity-80 transition">IDeal</a>
             </h1>
-            <nav className="hidden md:flex gap-6">
-              <a href="/" className="hover:text-amber-400 transition">Home</a>
-              <a href="/search" className="hover:text-amber-400 transition">Browse Cars</a>
-              <a href="/auth/login" className="hover:text-amber-400 transition">Sign In</a>
-              <a href="/auth/signup" className="hover:text-amber-400 transition font-semibold text-amber-400">Sell Your Car</a>
-            </nav>
+            <HeaderNav />
             {/* Mobile menu */}
             <MobileMenu />
           </div>

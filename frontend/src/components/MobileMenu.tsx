@@ -2,9 +2,17 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { isAuthenticated } from '@/lib/auth';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const authenticated = isAuthenticated();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
 
   return (
     <>
@@ -41,20 +49,50 @@ export default function MobileMenu() {
             >
               Browse Cars
             </Link>
-            <Link
-              href="/auth/login"
-              className="hover:text-amber-400 transition py-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/auth/signup"
-              className="font-semibold text-amber-400 hover:text-amber-300 transition py-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Sell Your Car
-            </Link>
+            {authenticated ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="hover:text-amber-400 transition py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/listing/create"
+                  className="font-semibold text-amber-400 hover:text-amber-300 transition py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  + Create Listing
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="text-left hover:text-amber-400 transition py-2 text-red-400 font-semibold"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="hover:text-amber-400 transition py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="font-semibold text-amber-400 hover:text-amber-300 transition py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sell Your Car
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       )}

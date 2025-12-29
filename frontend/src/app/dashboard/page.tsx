@@ -174,7 +174,7 @@ export default function DashboardPage() {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Your Listings</h2>
                 <Link
-                  href="/sell"
+                  href="/listing/create"
                   className="bg-blue-600 text-white px-4 py-2 rounded font-bold hover:bg-blue-700"
                 >
                   + New Listing
@@ -184,7 +184,7 @@ export default function DashboardPage() {
               {cars.length === 0 ? (
                 <div className="bg-white rounded-lg shadow p-12 text-center">
                   <p className="text-gray-600 mb-4">You haven&apos;t created any listings yet</p>
-                  <Link href="/sell" className="text-blue-600 font-bold hover:underline">
+                  <Link href="/listing/create" className="text-blue-600 font-bold hover:underline">
                     Create Your First Listing
                   </Link>
                 </div>
