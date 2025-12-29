@@ -1,31 +1,31 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { Readable } from 'stream';
 
-// Configure Cloudinary - apply config on every function call to ensure env vars are loaded
-function getCloudinaryConfig() {
+// Track if Cloudinary has been configured
+let isConfigured = false;
+
+// Configure Cloudinary lazily (only when first needed)
+function ensureCloudinaryConfigured() {
+  if (isConfigured) {
+    return;
+  }
+
   const config = {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   };
   
-  console.log('📋 Checking Cloudinary Config:');
-  console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME || 'UNDEFINED');
-  console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY || 'UNDEFINED');
-  console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '****' : 'UNDEFINED');
-  
-  return config;
+  // Configure Cloudinary
+  cloudinary.config(config);
+  isConfigured = true;
+
+  // Debug logging
+  console.log('🔧 Cloudinary Configuration:');
+  console.log('   Cloud Name:', config.cloud_name ? '✓ Set' : '✗ Missing');
+  console.log('   API Key:', config.api_key ? '✓ Set' : '✗ Missing');
+  console.log('   API Secret:', config.api_secret ? '✓ Set' : '✗ Missing');
 }
-
-// Configure Cloudinary at startup
-const initialConfig = getCloudinaryConfig();
-cloudinary.config(initialConfig);
-
-// Debug logging
-console.log('🔧 Cloudinary Initial Configuration:');
-console.log('   Cloud Name:', initialConfig.cloud_name ? '✓ Set' : '✗ Missing');
-console.log('   API Key:', initialConfig.api_key ? '✓ Set' : '✗ Missing');
-console.log('   API Secret:', initialConfig.api_secret ? '✓ Set' : '✗ Missing');
 
 export interface UploadResponse {
   url: string;
@@ -36,10 +36,12 @@ export async function uploadToCloudinary(
   fileBuffer: Buffer,
   filename: string
 ): Promise<UploadResponse> {
-  // Re-apply config before each upload to ensure credentials are available
-  const config = getCloudinaryConfig();
-  if (!config.api_key || !config.cloud_name || !config.api_secret) {
-    throw new Error(`Cloudinary config incomplete: cloud_name=${config.cloud_name}, api_key=${config.api_key ? 'set' : 'missing'}, api_secret=${config.api_secret ? 'set' : 'missing'}`);
+  // Ensure Cloudinary is configured before use
+  ensureCloudinaryConfigured();
+
+  // Validate configuration
+  if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_SECRET) {
+    throw new Error(`Cloudinary config incomplete: cloud_name=${process.env.CLOUDINARY_CLOUD_NAME}, api_key=${process.env.CLOUDINARY_API_KEY ? 'set' : 'missing'}, api_secret=${process.env.CLOUDINARY_API_SECRET ? 'set' : 'missing'}`);
   }
 
   return new Promise((resolve, reject) => {
@@ -70,6 +72,8 @@ export async function uploadToCloudinary(
 }
 
 export async function deleteFromCloudinary(publicId: string): Promise<void> {
+  // Ensure Cloudinary is configured before use
+  ensureCloudinaryConfigured();
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {
