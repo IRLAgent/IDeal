@@ -44,7 +44,11 @@ router.post(
       res.json({ urls });
     } catch (error: any) {
       console.error('Upload error:', error);
-      res.status(500).json({ error: error.message || 'Failed to upload files' });
+      const errorMessage = error.message || 'Failed to upload files';
+      res.status(500).json({ 
+        error: errorMessage,
+        details: error.toString()
+      });
     }
   }
 );
