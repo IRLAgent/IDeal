@@ -3,21 +3,29 @@ import { Readable } from 'stream';
 
 // Configure Cloudinary - apply config on every function call to ensure env vars are loaded
 function getCloudinaryConfig() {
-  return {
+  const config = {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   };
+  
+  console.log('📋 Checking Cloudinary Config:');
+  console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME || 'UNDEFINED');
+  console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY || 'UNDEFINED');
+  console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '****' : 'UNDEFINED');
+  
+  return config;
 }
 
 // Configure Cloudinary at startup
-cloudinary.config(getCloudinaryConfig());
+const initialConfig = getCloudinaryConfig();
+cloudinary.config(initialConfig);
 
 // Debug logging
-console.log('🔧 Cloudinary Configuration:');
-console.log('   Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME ? '✓ Set' : '✗ Missing');
-console.log('   API Key:', process.env.CLOUDINARY_API_KEY ? '✓ Set' : '✗ Missing');
-console.log('   API Secret:', process.env.CLOUDINARY_API_SECRET ? '✓ Set' : '✗ Missing');
+console.log('🔧 Cloudinary Initial Configuration:');
+console.log('   Cloud Name:', initialConfig.cloud_name ? '✓ Set' : '✗ Missing');
+console.log('   API Key:', initialConfig.api_key ? '✓ Set' : '✗ Missing');
+console.log('   API Secret:', initialConfig.api_secret ? '✓ Set' : '✗ Missing');
 
 export interface UploadResponse {
   url: string;
