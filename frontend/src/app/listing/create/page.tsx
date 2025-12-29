@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiCallAuth } from '@/lib/api';
@@ -15,6 +15,7 @@ const TRANSMISSIONS = ['Manual', 'Automatic'];
 
 export default function CreateListingPage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     make: '',
     model: '',
@@ -25,16 +26,19 @@ export default function CreateListingPage() {
     fuelType: '',
     transmission: '',
     description: '',
-    photoUrls: [''],
   });
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Redirect if not authenticated
-  if (!isAuthenticated()) {
-    router.push('/auth/login');
-    return null;
-  }
+  // Check authentication on client side only
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push('/auth/login');
+    } else {
+      setMounted(true);
+    }
+  }, [router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -44,24 +48,13 @@ export default function CreateListingPage() {
     });
   };
 
-  const handlePhotoUrlChange = (index: number, value: string) => {
-    const newPhotoUrls = [...formData.photoUrls];
-    newPhotoUrls[index] = value;
-    setFormData({ ...formData, photoUrls: newPhotoUrls });
+  const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setPhotoFiles(files);
   };
 
-  const addPhotoUrl = () => {
-    setFormData({
-      ...formData,
-      photoUrls: [...formData.photoUrls, ''],
-    });
-  };
-
-  const removePhotoUrl = (index: number) => {
-    setFormData({
-      ...formData,
-      photoUrls: formData.photoUrls.filter((_, i) => i !== index),
-    });
+  const removePhotoFile = (index: number) => {
+    setPhotoFiles(photoFiles.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,11 +70,8 @@ export default function CreateListingPage() {
         return;
       }
 
-      // Filter out empty photo URLs
-      const photoUrls = formData.photoUrls.filter(url => url.trim() !== '');
-      
-      if (photoUrls.length === 0) {
-        setError('Please add at least one photo URL');
+      if (photoFiles.length === 0) {
+        setError('Please add at least one photo');
         setLoading(false);
         return;
       }
@@ -93,6 +83,30 @@ export default function CreateListingPage() {
         return;
       }
 
+      // Upload files to Cloudinary
+      setLoading(true);
+      const formDataForUpload = new FormData();
+      photoFiles.forEach((file) => {
+        formDataForUpload.append('files', file);
+      });
+
+      const uploadResponse = await fetch('/api/upload/upload', {
+        method: 'POST',
+        body: formDataForUpload,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        const uploadError = await uploadResponse.json();
+        throw new Error(uploadError.error || 'Failed to upload photos');
+      }
+
+      const uploadData = await uploadResponse.json();
+      const photoUrls = uploadData.urls;
+
+      // Create car listing with uploaded photo URLs
       await apiCallAuth('/cars', {
         method: 'POST',
         headers: {
@@ -124,6 +138,11 @@ export default function CreateListingPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      {!mounted ? (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      ) : (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-6">
           <Link href="/dashboard" className="text-purple-900 hover:text-purple-950 font-semibold">
@@ -303,45 +322,42 @@ export default function CreateListingPage() {
               />
             </div>
 
-            {/* Photo URLs */}
+            {/* Photo Files */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Photo URLs <span className="text-red-500">*</span>
+                Photos <span className="text-red-500">*</span>
               </label>
               <p className="text-xs text-gray-500 mb-4">
-                Add URLs to images of your car. Use Pexels (pexels.com) or similar free image services.
+                Upload up to 10 photos of your car. Supported formats: JPG, PNG, WebP
               </p>
               
-              <div className="space-y-3">
-                {formData.photoUrls.map((url, index) => (
-                  <div key={index} className="flex gap-2">
-                    <input
-                      type="url"
-                      value={url}
-                      onChange={(e) => handlePhotoUrlChange(index, e.target.value)}
-                      placeholder="https://example.com/image.jpg"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-sm"
-                    />
-                    {formData.photoUrls.length > 1 && (
+              <div className="mb-4">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handlePhotoFileChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-sm"
+                />
+              </div>
+
+              {photoFiles.length > 0 && (
+                <div className="space-y-2 mb-4">
+                  <p className="text-sm font-semibold text-gray-700">Selected Photos ({photoFiles.length})</p>
+                  {photoFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
+                      <span className="text-sm text-gray-700 truncate">{file.name}</span>
                       <button
                         type="button"
-                        onClick={() => removePhotoUrl(index)}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold"
+                        onClick={() => removePhotoFile(index)}
+                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm font-semibold"
                       >
                         Remove
                       </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={addPhotoUrl}
-                className="mt-3 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold text-sm"
-              >
-                + Add Another Photo
-              </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -363,6 +379,7 @@ export default function CreateListingPage() {
           </form>
         </div>
       </div>
+      )}
     </main>
   );
 }
