@@ -85,7 +85,7 @@ export default function SignupPage() {
               placeholder="John Doe"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
               required
             />
           </div>
@@ -98,7 +98,7 @@ export default function SignupPage() {
               placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
               required
             />
           </div>
@@ -111,7 +111,7 @@ export default function SignupPage() {
               placeholder="+353 87 123 4567"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
             />
           </div>
 
@@ -121,7 +121,7 @@ export default function SignupPage() {
               name="userType"
               value={formData.userType}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
             >
               <option value="buyer">Buyer</option>
               <option value="seller">Seller (Private)</option>
@@ -137,7 +137,7 @@ export default function SignupPage() {
               placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
               required
             />
             <p className="text-sm text-gray-500 mt-1">Min 8 characters</p>
@@ -151,7 +151,7 @@ export default function SignupPage() {
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
               required
             />
           </div>
@@ -159,7 +159,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 transition disabled:bg-gray-400"
+            className="w-full bg-purple-900 text-white p-3 rounded font-bold hover:bg-purple-950 transition disabled:bg-gray-400"
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
@@ -168,7 +168,7 @@ export default function SignupPage() {
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Already have an account?{' '}
-            <Link href="/auth/login" className="text-blue-600 font-bold hover:underline">
+            <Link href="/auth/login" className="text-purple-900 font-bold hover:underline">
               Sign In
             </Link>
           </p>

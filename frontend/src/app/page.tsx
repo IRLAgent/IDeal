@@ -20,8 +20,8 @@ export default function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-primary text-white rounded-lg p-8 md:p-12 mb-12 border-2 border-amber-500">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-300 to-amber-400 bg-clip-text text-transparent">
+      <section className="bg-purple-900 text-white rounded-lg p-8 md:p-12 mb-12 border-2 border-purple-700">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
           Find Your Perfect Car
         </h1>
         <p className="text-lg md:text-xl mb-8 opacity-90">
@@ -29,7 +29,7 @@ export default function Home() {
         </p>
 
         {/* Search Form */}
-        <form onSubmit={handleSearch} className="bg-gray-900 text-gray-200 p-6 rounded-lg max-w-2xl border border-purple-700">
+        <form onSubmit={handleSearch} className="bg-white text-gray-900 p-6 rounded-lg max-w-2xl border border-purple-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <input
               type="text"
@@ -67,7 +67,7 @@ export default function Home() {
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white p-3 rounded font-bold hover:from-amber-600 hover:to-amber-700 transition shadow-lg"
+            className="w-full bg-purple-900 text-white p-3 rounded font-bold hover:bg-purple-950 transition shadow-lg"
           >
             Search Cars
           </button>
@@ -78,31 +78,31 @@ export default function Home() {
       <section className="mb-12">
         <h2 className="text-3xl font-bold mb-8 text-white">Browse by Category</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="card border-l-4 border-amber-500 hover:shadow-xl hover:shadow-amber-500/20 transition">
-            <h3 className="font-bold text-lg mb-2 text-amber-400">Used Cars</h3>
-            <p className="text-gray-400">Browse used vehicles from private sellers</p>
-            <a href="/search?type=used" className="text-amber-400 font-semibold mt-4 inline-block hover:text-amber-300 transition">
+          <div className="card border-l-4 border-purple-900 hover:shadow-xl hover:shadow-purple-900/20 transition">
+            <h3 className="font-bold text-lg mb-2 text-purple-900">Used Cars</h3>
+            <p className="text-gray-600">Browse used vehicles from private sellers</p>
+            <a href="/search?type=used" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
               View All →
             </a>
           </div>
-          <div className="card border-l-4 border-amber-500 hover:shadow-xl hover:shadow-amber-500/20 transition">
-            <h3 className="font-bold text-lg mb-2 text-blue-600">Dealer Cars</h3>
+          <div className="card border-l-4 border-purple-900 hover:shadow-xl hover:shadow-purple-900/20 transition">
+            <h3 className="font-bold text-lg mb-2 text-purple-900">Dealer Cars</h3>
             <p className="text-gray-600">New and certified dealer inventory</p>
-            <a href="/search?type=dealer" className="text-blue-600 font-semibold mt-4 inline-block hover:underline">
+            <a href="/search?type=dealer" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
               View All →
             </a>
           </div>
           <div className="card">
-            <h3 className="font-bold text-lg mb-2 text-blue-600">Sell Your Car</h3>
+            <h3 className="font-bold text-lg mb-2 text-purple-900">Sell Your Car</h3>
             <p className="text-gray-600">Quick and easy listing process</p>
-            <a href="/auth/signup" className="text-blue-600 font-semibold mt-4 inline-block hover:underline">
+            <a href="/auth/signup" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
               Get Started →
             </a>
           </div>
           <div className="card">
-            <h3 className="font-bold text-lg mb-2 text-blue-600">Value My Car</h3>
+            <h3 className="font-bold text-lg mb-2 text-purple-900">Value My Car</h3>
             <p className="text-gray-600">Get instant car valuation</p>
-            <a href="#" className="text-blue-600 font-semibold mt-4 inline-block hover:underline">
+            <a href="#" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
               Check Now →
             </a>
           </div>
@@ -122,7 +122,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-lg mb-2">Car Make & Model</h3>
               <p className="text-gray-600 mb-4">2020 | 50,000 km | Location</p>
-              <p className="text-2xl font-bold text-blue-600">€15,990</p>
+              <p className="text-2xl font-bold text-purple-900">€15,990</p>
             </div>
           ))}
         </div>

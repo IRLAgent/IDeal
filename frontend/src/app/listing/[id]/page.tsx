@@ -180,9 +180,9 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-1">
           {/* Price Card */}
           <div className="bg-white rounded-lg shadow p-6 mb-6 sticky top-24">
-            <p className="text-4xl font-bold text-blue-600 mb-4">€{listing.price.toLocaleString()}</p>
+            <p className="text-4xl font-bold text-purple-900 mb-4">€{listing.price.toLocaleString()}</p>
 
-            <button className="w-full bg-blue-600 text-white p-3 rounded font-bold hover:bg-blue-700 mb-3">
+            <button className="w-full bg-purple-900 text-white p-3 rounded font-bold hover:bg-purple-950 mb-3">
               Call Seller
             </button>
             <button className="w-full bg-gray-200 text-gray-800 p-3 rounded font-bold hover:bg-gray-300 mb-6">
@@ -193,7 +193,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
             <div className="border-t pt-6">
               <h3 className="font-bold text-lg mb-4">Seller Details</h3>
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                <div className="w-12 h-12 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold">
                   {seller?.name.charAt(0) || 'J'}
                 </div>
                 <div className="ml-3">
@@ -204,7 +204,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
               <p className="text-gray-600 text-sm mb-4">
                 <span className="text-yellow-500">★★★★★</span> 5.0 (12 reviews)
               </p>
-              <button className="w-full border border-blue-600 text-blue-600 p-2 rounded hover:bg-blue-50 text-sm">
+              <button className="w-full border border-purple-900 text-purple-900 p-2 rounded hover:bg-purple-50 text-sm">
                 View Other Listings
               </button>
             </div>
@@ -227,7 +227,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
 
               {!currentUser ? (
                 <p className="text-gray-600 text-sm mb-3">
-                  <a href="/auth/login" className="text-blue-600 font-bold">Log in</a> to send a message
+                  <a href="/auth/login" className="text-purple-900 font-bold">Log in</a> to send a message
                 </p>
               ) : (
                 <form onSubmit={handleSendMessage} className="space-y-3">
@@ -235,7 +235,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
                     placeholder="Hi, I'm interested in this car..."
                     value={messageText}
                     onChange={(e) => setMessageText(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none h-24"
+                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900 resize-none h-24"
                     required
                   />
                   <button
@@ -273,7 +273,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-1">BMW 3 Series</h3>
                 <p className="text-gray-600 mb-2">2019 • Dublin</p>
-                <p className="text-xl font-bold text-blue-600">€19,990</p>
+                <p className="text-xl font-bold text-purple-900">€19,990</p>
               </div>
             </div>
           ))}

@@ -7,6 +7,8 @@ import { apiCallAuth } from '@/lib/api';
 import { isAuthenticated, getAuthToken } from '@/lib/auth';
 import { IRISH_COUNTIES } from '@/constants/counties';
 
+export const dynamic = 'force-dynamic';
+
 const CAR_MAKES = ['BMW', 'Ford', 'Mercedes', 'Audi', 'Volkswagen', 'Toyota', 'Hyundai', 'Peugeot', 'Renault', 'Nissan', 'Vauxhall', 'Citroën'];
 const FUEL_TYPES = ['Petrol', 'Diesel', 'Hybrid', 'Electric'];
 const TRANSMISSIONS = ['Manual', 'Automatic'];
@@ -121,10 +123,10 @@ export default function CreateListingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <main className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <Link href="/dashboard" className="text-blue-600 hover:text-blue-700 font-semibold">
+          <Link href="/dashboard" className="text-purple-900 hover:text-purple-950 font-semibold">
             ← Back to Dashboard
           </Link>
         </div>
@@ -150,7 +152,7 @@ export default function CreateListingPage() {
                   name="make"
                   value={formData.make}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                   required
                 >
                   <option value="">Select Make</option>
@@ -171,7 +173,7 @@ export default function CreateListingPage() {
                   value={formData.model}
                   onChange={handleInputChange}
                   placeholder="e.g., 3 Series, Focus, A4"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                   required
                 />
               </div>
@@ -190,7 +192,7 @@ export default function CreateListingPage() {
                   onChange={handleInputChange}
                   min="1990"
                   max={new Date().getFullYear()}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                   required
                 />
               </div>
@@ -204,7 +206,7 @@ export default function CreateListingPage() {
                   value={formData.price}
                   onChange={handleInputChange}
                   placeholder="e.g., 24900"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                   required
                 />
               </div>
@@ -222,7 +224,7 @@ export default function CreateListingPage() {
                   value={formData.mileage}
                   onChange={handleInputChange}
                   placeholder="e.g., 45000"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                 />
               </div>
               <div>
@@ -233,7 +235,7 @@ export default function CreateListingPage() {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                   required
                 >
                   <option value="">Select County</option>
@@ -256,7 +258,7 @@ export default function CreateListingPage() {
                   name="fuelType"
                   value={formData.fuelType}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                 >
                   <option value="">Select Fuel Type</option>
                   {FUEL_TYPES.map((type) => (
@@ -274,7 +276,7 @@ export default function CreateListingPage() {
                   name="transmission"
                   value={formData.transmission}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
                 >
                   <option value="">Select Transmission</option>
                   {TRANSMISSIONS.map((type) => (
@@ -297,7 +299,7 @@ export default function CreateListingPage() {
                 onChange={handleInputChange}
                 placeholder="Describe the condition, features, and history of your car..."
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
               />
             </div>
 
@@ -318,7 +320,7 @@ export default function CreateListingPage() {
                       value={url}
                       onChange={(e) => handlePhotoUrlChange(index, e.target.value)}
                       placeholder="https://example.com/image.jpg"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-sm"
                     />
                     {formData.photoUrls.length > 1 && (
                       <button
@@ -347,7 +349,7 @@ export default function CreateListingPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-purple-900 text-white p-3 rounded-lg font-bold hover:bg-purple-950 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Listing'}
               </button>

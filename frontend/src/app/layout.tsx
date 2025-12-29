@@ -19,9 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="bg-gradient-to-r from-purple-900 to-purple-800 text-white shadow-lg sticky top-0 z-50 border-b-2 border-amber-500">
+        <header className="bg-purple-900 text-white shadow-lg sticky top-0 z-50 border-b-4 border-purple-700">
           <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-white">
               <a href="/" className="hover:opacity-80 transition">IDeal</a>
             </h1>
             <HeaderNav />
@@ -32,39 +32,39 @@ export default function RootLayout({
 
         {children}
 
-        <footer className="bg-gradient-to-r from-purple-900 to-gray-900 text-gray-300 py-12 mt-16 border-t-2 border-amber-500">
+        <footer className="bg-purple-900 text-gray-300 py-12 mt-16 border-t-4 border-purple-700">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 className="font-bold text-amber-400 mb-4">About</h3>
+                <h3 className="font-bold text-white mb-4">About</h3>
                 <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-amber-400 transition">About Us</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Contact</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Blog</a></li>
+                  <li><a href="#" className="hover:text-white transition">About Us</a></li>
+                  <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                  <li><a href="#" className="hover:text-white transition">Blog</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-amber-400 mb-4">Buying</h3>
+                <h3 className="font-bold text-white mb-4">Buying</h3>
                 <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-amber-400 transition">Browse Cars</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Value My Car</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">History Check</a></li>
+                  <li><a href="#" className="hover:text-white transition">Browse Cars</a></li>
+                  <li><a href="#" className="hover:text-white transition">Value My Car</a></li>
+                  <li><a href="#" className="hover:text-white transition">History Check</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-amber-400 mb-4">Selling</h3>
+                <h3 className="font-bold text-white mb-4">Selling</h3>
                 <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-amber-400 transition">Sell My Car</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Pricing</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Dealer Program</a></li>
+                  <li><a href="#" className="hover:text-white transition">Sell My Car</a></li>
+                  <li><a href="#" className="hover:text-white transition">Pricing</a></li>
+                  <li><a href="#" className="hover:text-white transition">Dealer Program</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-amber-400 mb-4">Legal</h3>
+                <h3 className="font-bold text-white mb-4">Legal</h3>
                 <ul className="space-y-2">
-                  <li><a href="#" className="hover:text-amber-400 transition">Privacy Policy</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Terms of Service</a></li>
-                  <li><a href="#" className="hover:text-amber-400 transition">Cookie Policy</a></li>
+                  <li><a href="#" className="hover:text-white transition">Privacy Policy</a></li>
+                  <li><a href="#" className="hover:text-white transition">Terms of Service</a></li>
+                  <li><a href="#" className="hover:text-white transition">Cookie Policy</a></li>
                 </ul>
               </div>
             </div>

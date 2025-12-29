@@ -118,17 +118,17 @@ export default function DashboardPage() {
         <>
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-900">
               <p className="text-gray-600 mb-2">Total Listings</p>
-              <p className="text-4xl font-bold text-blue-600">{stats.totalListings}</p>
+              <p className="text-4xl font-bold text-purple-900">{stats.totalListings}</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-900">
               <p className="text-gray-600 mb-2">Total Views</p>
-              <p className="text-4xl font-bold text-green-600">{stats.totalViews}</p>
+              <p className="text-4xl font-bold text-purple-900">{stats.totalViews}</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-900">
               <p className="text-gray-600 mb-2">New Messages</p>
-              <p className="text-4xl font-bold text-orange-600">{stats.totalMessages}</p>
+              <p className="text-4xl font-bold text-purple-900">{stats.totalMessages}</p>
             </div>
           </div>
 
@@ -139,7 +139,7 @@ export default function DashboardPage() {
                 onClick={() => setActiveTab('listings')}
                 className={`py-3 font-bold border-b-2 transition ${
                   activeTab === 'listings'
-                    ? 'border-blue-600 text-blue-600'
+                    ? 'border-purple-900 text-purple-900'
                     : 'border-transparent text-gray-600'
                 }`}
               >
@@ -149,7 +149,7 @@ export default function DashboardPage() {
                 onClick={() => setActiveTab('messages')}
                 className={`py-3 font-bold border-b-2 transition ${
                   activeTab === 'messages'
-                    ? 'border-blue-600 text-blue-600'
+                    ? 'border-purple-900 text-purple-900'
                     : 'border-transparent text-gray-600'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                 onClick={() => setActiveTab('account')}
                 className={`py-3 font-bold border-b-2 transition ${
                   activeTab === 'account'
-                    ? 'border-blue-600 text-blue-600'
+                    ? 'border-purple-900 text-purple-900'
                     : 'border-transparent text-gray-600'
                 }`}
               >
@@ -175,7 +175,7 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-bold">Your Listings</h2>
                 <Link
                   href="/listing/create"
-                  className="bg-blue-600 text-white px-4 py-2 rounded font-bold hover:bg-blue-700"
+                  className="bg-purple-900 text-white px-4 py-2 rounded font-bold hover:bg-purple-950"
                 >
                   + New Listing
                 </Link>
@@ -184,7 +184,7 @@ export default function DashboardPage() {
               {cars.length === 0 ? (
                 <div className="bg-white rounded-lg shadow p-12 text-center">
                   <p className="text-gray-600 mb-4">You haven&apos;t created any listings yet</p>
-                  <Link href="/listing/create" className="text-blue-600 font-bold hover:underline">
+                  <Link href="/listing/create" className="text-purple-900 font-bold hover:underline">
                     Create Your First Listing
                   </Link>
                 </div>
@@ -206,7 +206,7 @@ export default function DashboardPage() {
                           {car.year} {car.make} {car.model}
                         </h3>
                         <p className="text-gray-600">{car.mileage.toLocaleString()} km • {car.location}</p>
-                        <p className="font-bold text-blue-600 mt-2">€{car.price.toLocaleString()}</p>
+                        <p className="font-bold text-purple-900 mt-2">€{car.price.toLocaleString()}</p>
                       </div>
                       <div className="flex gap-2">
                         <Link
@@ -273,7 +273,7 @@ export default function DashboardPage() {
                     <label className="block text-gray-700 font-semibold mb-2">Account Type</label>
                     <p className="text-gray-600">{user?.userType === 'seller' ? 'Private Seller' : 'Buyer'}</p>
                   </div>
-                  <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded font-bold hover:bg-blue-700">
+                  <button type="submit" className="bg-purple-900 text-white px-6 py-3 rounded font-bold hover:bg-purple-950">
                     Save Changes
                   </button>
                 </form>

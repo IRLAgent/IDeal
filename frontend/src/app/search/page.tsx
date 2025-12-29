@@ -147,7 +147,7 @@ export default function SearchPage() {
                 </select>
               </div>
 
-              <button onClick={handleApplyFilters} className="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">
+              <button onClick={handleApplyFilters} className="w-full bg-purple-900 text-white p-2 rounded font-bold hover:bg-purple-950">
                 Apply Filters
               </button>
             </div>
@@ -196,8 +196,8 @@ export default function SearchPage() {
                     <p className="text-gray-600 mb-2">
                       {car.mileage.toLocaleString()} km • {car.location}
                     </p>
-                    <p className="text-2xl font-bold text-blue-600 mb-4">€{car.price.toLocaleString()}</p>
-                    <button className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">
+                    <p className="text-2xl font-bold text-purple-900 mb-4">€{car.price.toLocaleString()}</p>
+                    <button className="w-full bg-purple-900 text-white p-2 rounded hover:bg-purple-950 transition">
                       View Details
                     </button>
                   </div>
