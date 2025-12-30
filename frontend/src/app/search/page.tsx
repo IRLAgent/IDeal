@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { IRISH_COUNTIES } from '@/constants/counties';
 import { apiCall } from '@/lib/api';
 
@@ -198,7 +199,11 @@ export default function SearchPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {cars.map((car) => (
-                <div key={car.id} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
+                <Link 
+                  key={car.id} 
+                  href={`/listing/${car.id}`}
+                  className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden block"
+                >
                   <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
                     {car.photoUrls && car.photoUrls.length > 0 ? (
                       <img src={car.photoUrls[0]} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover" />
@@ -216,11 +221,11 @@ export default function SearchPage() {
                       {car.mileage.toLocaleString()} km • {car.location}
                     </p>
                     <p className="text-2xl font-bold text-indigo-950 mb-4">€{car.price.toLocaleString()}</p>
-                    <button className="w-full bg-indigo-950 text-white p-2 rounded hover:bg-indigo-950 transition">
+                    <div className="w-full bg-indigo-950 text-white p-2 rounded hover:bg-indigo-900 transition text-center">
                       View Details
-                    </button>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

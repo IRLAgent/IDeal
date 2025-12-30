@@ -191,8 +191,8 @@ export default function DashboardPage() {
               ) : (
                 <div className="grid gap-4">
                   {cars.map((car) => (
-                    <div key={car.id} className="bg-white rounded-lg shadow p-4 flex gap-4">
-                      <div className="w-24 h-24 bg-gray-300 rounded flex-shrink-0 overflow-hidden">
+                    <div key={car.id} className="bg-white rounded-lg shadow p-4 flex gap-4 hover:shadow-lg transition">
+                      <Link href={`/listing/${car.id}`} className="w-24 h-24 bg-gray-300 rounded flex-shrink-0 overflow-hidden">
                         {car.photoUrls && car.photoUrls.length > 0 ? (
                           <img src={car.photoUrls[0]} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover" />
                         ) : (
@@ -200,15 +200,23 @@ export default function DashboardPage() {
                             <span className="text-gray-400 text-sm">No image</span>
                           </div>
                         )}
-                      </div>
+                      </Link>
                       <div className="flex-grow">
-                        <h3 className="font-bold text-lg">
-                          {car.year} {car.make} {car.model}
-                        </h3>
+                        <Link href={`/listing/${car.id}`}>
+                          <h3 className="font-bold text-lg hover:text-indigo-950">
+                            {car.year} {car.make} {car.model}
+                          </h3>
+                        </Link>
                         <p className="text-gray-600">{car.mileage.toLocaleString()} km • {car.location}</p>
                         <p className="font-bold text-indigo-950 mt-2">€{car.price.toLocaleString()}</p>
                       </div>
                       <div className="flex gap-2">
+                        <Link
+                          href={`/listing/${car.id}`}
+                          className="px-4 py-2 border border-indigo-950 text-indigo-950 rounded hover:bg-indigo-50"
+                        >
+                          View
+                        </Link>
                         <Link
                           href={`/listing/${car.id}/edit`}
                           className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
