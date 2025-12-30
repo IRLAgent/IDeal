@@ -14,9 +14,11 @@ console.log('   NODE_ENV:', process.env.NODE_ENV);
 console.log('   PORT:', process.env.PORT);
 console.log('   DATABASE_URL:', process.env.DATABASE_URL ? '✓ Set' : '✗ Missing');
 console.log('   JWT_SECRET:', process.env.JWT_SECRET ? '✓ Set' : '✗ Missing');
-console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? `✓ ${process.env.CLOUDINARY_CLOUD_NAME}` : '✗ Missing');
-console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? '✓ Set' : '✗ Missing');
-console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '✓ Set' : '✗ Missing');
+console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME || 'undefined');
+console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY || 'undefined');
+console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET || 'undefined');
+console.log('   All env keys:', Object.keys(process.env).filter(k => k.includes('CLOUDINARY') || k.includes('DATABASE') || k.includes('JWT')));
+console.log('   Total env vars:', Object.keys(process.env).length);
 console.log('');
 
 const app = express();
