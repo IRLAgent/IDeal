@@ -22,18 +22,53 @@ interface Car {
 
 interface Message {
   id: string;
-  senderName: string;
-  senderEmail: string;
-  carTitle: string;
-  content: string;
+  fromUserId: string;
+  toUserId: string;
+  carId: string | null;
+  messageText: string;
+  read: boolean;
   createdAt: string;
+  fromUser: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  toUser: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  car: {
+    id: string;
+    title: string;
+    make: string;
+    model: string;
+    year: number;
+  } | null;
+}
+
+interface Conversation {
+  otherUser: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  lastMessage: Message;
+  unreadCount: number;
+  car: {
+    id: string;
+    title: string;
+    make: string;
+    model: string;
+    year: number;
+  } | null;
 }
 
 export default function DashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('listings');
   const [cars, setCars] = useState<Car[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [stats, setStats] = useState({
     totalViews: 0,
     totalMessages: 0,
@@ -42,6 +77,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const user = getUser();
+  const [currentUserId, setCurrentUserId] = useState<string>('');
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -61,19 +97,56 @@ export default function DashboardPage() {
       const token = getAuthToken();
       if (!token) throw new Error('No auth token found');
 
+      // Get current user ID from token
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setCurrentUserId(payload.userId);
+
       // Fetch user's car listings
       const carsResponse = await apiCallAuth<{ cars: Car[] }>('/cars/user/listings', { method: 'GET' }, token);
       setCars(carsResponse.cars || []);
 
       // Fetch user's messages
-      const messagesResponse = await apiCallAuth<{ messages: Message[] }>('/messages', { method: 'GET' }, token);
-      setMessages(messagesResponse.messages || []);
+      const messagesResponse = await apiCallAuth('/messages', { method: 'GET' }, token);
+      const messages = messagesResponse as Message[];
+
+      // Group messages into conversations
+      const conversationMap = new Map<string, Conversation>();
+
+      messages.forEach((message) => {
+        const isFromMe = message.fromUserId === payload.userId;
+        const otherUser = isFromMe ? message.toUser : message.fromUser;
+        const key = otherUser.id;
+
+        if (!conversationMap.has(key)) {
+          conversationMap.set(key, {
+            otherUser,
+            lastMessage: message,
+            unreadCount: 0,
+            car: message.car,
+          });
+        }
+
+        const conversation = conversationMap.get(key)!;
+        // Update with most recent message
+        if (new Date(message.createdAt) > new Date(conversation.lastMessage.createdAt)) {
+          conversation.lastMessage = message;
+        }
+
+        // Count unread messages from other user
+        if (!message.read && message.toUserId === payload.userId) {
+          conversation.unreadCount++;
+        }
+      });
+
+      const conversationsList = Array.from(conversationMap.values());
+      setConversations(conversationsList);
 
       // Calculate stats
+      const unreadCount = conversationsList.reduce((sum, conv) => sum + conv.unreadCount, 0);
       setStats({
         totalListings: carsResponse.cars?.length || 0,
         totalViews: 0, // TODO: Add view tracking to backend
-        totalMessages: messagesResponse.messages?.length || 0,
+        totalMessages: unreadCount,
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load dashboard';
@@ -250,24 +323,42 @@ export default function DashboardPage() {
           {activeTab === 'messages' && (
             <div>
               <h2 className="text-2xl font-bold mb-6">Messages</h2>
-              {messages.length === 0 ? (
+              {conversations.length === 0 ? (
                 <div className="bg-white rounded-lg shadow p-12 text-center">
                   <p className="text-gray-600">No messages yet</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {messages.map((msg) => (
-                    <div key={msg.id} className="bg-white rounded-lg shadow p-4">
+                  {conversations.map((conversation) => (
+                    <Link
+                      key={conversation.otherUser.id}
+                      href={`/messages/${conversation.otherUser.id}`}
+                      className="bg-white rounded-lg shadow p-4 hover:shadow-md transition block"
+                    >
                       <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 className="font-bold">{msg.senderName}</h3>
-                          <p className="text-sm text-gray-600">{msg.senderEmail}</p>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-bold">{conversation.otherUser.name}</h3>
+                            {conversation.unreadCount > 0 && (
+                              <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                {conversation.unreadCount}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">{conversation.otherUser.email}</p>
                         </div>
-                        <p className="text-sm text-gray-500">{new Date(msg.createdAt).toLocaleDateString()}</p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(conversation.lastMessage.createdAt).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-700 mb-2">Re: {msg.carTitle}</p>
-                      <p className="text-gray-600">{msg.content}</p>
-                    </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Re: {conversation.car?.title || 'Deleted listing'}
+                      </p>
+                      <p className="text-gray-600 truncate">
+                        {conversation.lastMessage.fromUserId === currentUserId ? 'You: ' : ''}
+                        {conversation.lastMessage.messageText}
+                      </p>
+                    </Link>
                   ))}
                 </div>
               )}
