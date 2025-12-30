@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { sendMessageNotification } from '../utils/email';
 
 const prisma = new PrismaClient();
 
@@ -9,15 +10,34 @@ export class MessageController {
     carId: string,
     messageText: string
   ) {
-    return await prisma.message.create({
+    const message = await prisma.message.create({
       data: {
         fromUserId,
         toUserId,
         carId,
         messageText,
       },
-      include: { fromUser: true, toUser: true },
+      include: { 
+        fromUser: true, 
+        toUser: true,
+        car: true,
+      },
     });
+
+    // Send email notification (async, don't wait)
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const conversationUrl = `${frontendUrl}/messages/${fromUserId}`;
+    
+    sendMessageNotification({
+      toEmail: message.toUser.email,
+      toName: message.toUser.name,
+      fromName: message.fromUser.name,
+      messageText: message.messageText,
+      carTitle: message.car ? `${message.car.year} ${message.car.make} ${message.car.model}` : undefined,
+      conversationUrl,
+    }).catch(err => console.error('Email notification failed:', err));
+
+    return message;
   }
 
   static async getConversation(userId: string, otherUserId: string) {
