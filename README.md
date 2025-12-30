@@ -2,6 +2,7 @@
 
 A responsive car marketplace for buying and selling vehicles in Ireland.
 
+
 ## Project Structure
 
 ```
