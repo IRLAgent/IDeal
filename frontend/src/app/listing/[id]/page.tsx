@@ -18,12 +18,14 @@ interface Car {
   photoUrls: string[];
   createdAt: string;
   userId: string;
+  user?: User;
 }
 
 interface User {
   id: string;
   name: string;
   email: string;
+  sellerType?: string;
 }
 
 export default function ListingPage({ params }: { params: { id: string } }) {
@@ -46,8 +48,11 @@ export default function ListingPage({ params }: { params: { id: string } }) {
     try {
       const response = await apiCall<Car>(`/cars/${params.id}`, { method: 'GET' });
       setListing(response);
-      // TODO: Fetch seller details from API
-      setSeller({ id: response.userId, name: 'John Doe', email: 'john@example.com' });
+      
+      // Set seller from response
+      if (response.user) {
+        setSeller(response.user);
+      }
     } catch (err) {
       console.error('Failed to load listing');
     } finally {
@@ -304,17 +309,23 @@ export default function ListingPage({ params }: { params: { id: string } }) {
             <div className="border-t pt-6">
               <h3 className="font-bold text-lg mb-4">Seller Details</h3>
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-indigo-950 text-white rounded-full flex items-center justify-center font-bold">
-                  {seller?.name.charAt(0) || 'J'}
+                <div className="w-12 h-12 bg-indigo-950 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                  {seller?.name.charAt(0).toUpperCase() || 'S'}
                 </div>
                 <div className="ml-3">
                   <p className="font-bold">{seller?.name || 'Seller'}</p>
-                  <p className="text-sm text-gray-600">Private Seller</p>
+                  <p className="text-sm text-gray-600 capitalize">
+                    {seller?.sellerType === 'dealer' ? 'Dealer' : 'Private Seller'}
+                  </p>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">
-                <span className="text-yellow-500">★★★★★</span> 5.0 (12 reviews)
-              </p>
+              {seller?.email && (
+                <p className="text-gray-600 text-sm mb-4">
+                  <a href={`mailto:${seller.email}`} className="text-indigo-950 hover:underline">
+                    {seller.email}
+                  </a>
+                </p>
+              )}
               <button className="w-full border border-indigo-950 text-indigo-950 p-2 rounded hover:bg-indigo-50 text-sm">
                 View Other Listings
               </button>
