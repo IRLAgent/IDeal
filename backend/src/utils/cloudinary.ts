@@ -10,6 +10,13 @@ function ensureCloudinaryConfigured() {
     return;
   }
 
+  // Debug: Log ALL environment variables related to Cloudinary
+  console.log('🔍 Environment Variables Check:');
+  console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME);
+  console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY);
+  console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '****' : undefined);
+  console.log('   All env keys:', Object.keys(process.env).filter(k => k.includes('CLOUDINARY')));
+
   const config = {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -21,7 +28,7 @@ function ensureCloudinaryConfigured() {
   isConfigured = true;
 
   // Debug logging
-  console.log('🔧 Cloudinary Configuration:');
+  console.log('🔧 Cloudinary Configuration Applied:');
   console.log('   Cloud Name:', config.cloud_name ? '✓ Set' : '✗ Missing');
   console.log('   API Key:', config.api_key ? '✓ Set' : '✗ Missing');
   console.log('   API Secret:', config.api_secret ? '✓ Set' : '✗ Missing');

@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiCall } from '@/lib/api';
 import { setAuthToken, AuthResponse } from '@/lib/auth';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,10 +25,11 @@ export default function LoginPage() {
       // Store token and user info
       setAuthToken(response.token, response.user);
 
-      // Redirect to dashboard
-      router.push('/dashboard');
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Invalid email or password';
+      // Redirect to dashboard with full page reload to update header auth state
+      window.location.href = '/dashboard';
+    } catch (err: any) {
+      console.error('Login error:', err);
+      const errorMessage = err.message || 'Invalid email or password';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -56,7 +55,7 @@ export default function LoginPage() {
               placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-indigo-950"
               required
             />
           </div>
@@ -68,7 +67,7 @@ export default function LoginPage() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-purple-900"
+              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-indigo-950"
               required
             />
           </div>
@@ -76,7 +75,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-900 text-white p-3 rounded font-bold hover:bg-purple-950 transition disabled:bg-gray-400"
+            className="w-full bg-indigo-950 text-white p-3 rounded font-bold hover:bg-indigo-950 transition disabled:bg-gray-400"
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </button>
@@ -85,14 +84,14 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-purple-900 font-bold hover:underline">
+            <Link href="/auth/signup" className="text-indigo-950 font-bold hover:underline">
               Sign Up
             </Link>
           </p>
         </div>
 
         <div className="mt-4 text-center">
-          <Link href="/" className="text-purple-900 text-sm hover:underline">
+          <Link href="/" className="text-indigo-950 text-sm hover:underline">
             Back to Home
           </Link>
         </div>

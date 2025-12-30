@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="bg-purple-900 text-white shadow-lg sticky top-0 z-50 border-b-4 border-purple-700">
+        <header className="bg-indigo-950 text-white shadow-lg sticky top-0 z-50 border-b-4 border-indigo-900">
           <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-3xl font-bold text-white">
               <a href="/" className="hover:opacity-80 transition">IDeal</a>
@@ -32,7 +32,7 @@ export default function RootLayout({
 
         {children}
 
-        <footer className="bg-purple-900 text-gray-300 py-12 mt-16 border-t-4 border-purple-700">
+        <footer className="bg-indigo-950 text-gray-300 py-12 mt-16 border-t-4 border-indigo-900">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
               <div>
@@ -68,7 +68,7 @@ export default function RootLayout({
                 </ul>
               </div>
             </div>
-            <div className="border-t border-purple-700 pt-8">
+            <div className="border-t border-indigo-900 pt-8">
               <p className="text-center text-gray-400">&copy; 2025 IDeal.ie. All rights reserved.</p>
             </div>
           </div>

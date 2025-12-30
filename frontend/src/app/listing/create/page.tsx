@@ -146,7 +146,7 @@ export default function CreateListingPage() {
       ) : (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <Link href="/dashboard" className="text-purple-900 hover:text-purple-950 font-semibold">
+          <Link href="/dashboard" className="text-indigo-950 hover:text-indigo-950 font-semibold">
             ← Back to Dashboard
           </Link>
         </div>
@@ -154,7 +154,7 @@ export default function CreateListingPage() {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-4xl font-bold mb-2 text-slate-900">Create New Listing</h1>
           <p className="text-gray-600 mb-8">Fill in the details about your car to create a new listing</p>
-
+          
           {error && (
             <div className="bg-red-100 text-red-700 p-4 rounded mb-6 border border-red-300">
               {error}
@@ -172,7 +172,7 @@ export default function CreateListingPage() {
                   name="make"
                   value={formData.make}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                   required
                 >
                   <option value="">Select Make</option>
@@ -193,7 +193,7 @@ export default function CreateListingPage() {
                   value={formData.model}
                   onChange={handleInputChange}
                   placeholder="e.g., 3 Series, Focus, A4"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                   required
                 />
               </div>
@@ -212,7 +212,7 @@ export default function CreateListingPage() {
                   onChange={handleInputChange}
                   min="1990"
                   max={new Date().getFullYear()}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                   required
                 />
               </div>
@@ -226,7 +226,7 @@ export default function CreateListingPage() {
                   value={formData.price}
                   onChange={handleInputChange}
                   placeholder="e.g., 24900"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                   required
                 />
               </div>
@@ -244,7 +244,7 @@ export default function CreateListingPage() {
                   value={formData.mileage}
                   onChange={handleInputChange}
                   placeholder="e.g., 45000"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                 />
               </div>
               <div>
@@ -255,7 +255,7 @@ export default function CreateListingPage() {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                   required
                 >
                   <option value="">Select County</option>
@@ -278,7 +278,7 @@ export default function CreateListingPage() {
                   name="fuelType"
                   value={formData.fuelType}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                 >
                   <option value="">Select Fuel Type</option>
                   {FUEL_TYPES.map((type) => (
@@ -296,7 +296,7 @@ export default function CreateListingPage() {
                   name="transmission"
                   value={formData.transmission}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
                 >
                   <option value="">Select Transmission</option>
                   {TRANSMISSIONS.map((type) => (
@@ -319,7 +319,7 @@ export default function CreateListingPage() {
                 onChange={handleInputChange}
                 placeholder="Describe the condition, features, and history of your car..."
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
               />
             </div>
 
@@ -338,7 +338,7 @@ export default function CreateListingPage() {
                   multiple
                   accept="image/*"
                   onChange={handlePhotoFileChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-sm"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950 text-sm"
                 />
               </div>
 
@@ -366,7 +366,7 @@ export default function CreateListingPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-purple-900 text-white p-3 rounded-lg font-bold hover:bg-purple-950 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-indigo-950 text-white p-3 rounded-lg font-bold hover:bg-indigo-950 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Listing'}
               </button>

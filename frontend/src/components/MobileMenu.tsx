@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { isAuthenticated } from '@/lib/auth';
+import { isAuthenticated, clearAuth } from '@/lib/auth';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,8 +13,8 @@ export default function MobileMenu() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
+    clearAuth();
+    setAuthenticated(false);
     window.location.href = '/';
   };
 
@@ -37,7 +37,7 @@ export default function MobileMenu() {
 
       {/* Mobile menu dropdown */}
       {isOpen && (
-        <nav className="absolute top-full left-0 right-0 bg-purple-900 border-b-4 border-purple-700 md:hidden">
+        <nav className="absolute top-full left-0 right-0 bg-indigo-950 border-b-4 border-indigo-900 md:hidden">
           <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-4">
             <Link
               href="/"
@@ -64,7 +64,7 @@ export default function MobileMenu() {
                 </Link>
                 <Link
                   href="/listing/create"
-                  className="font-semibold text-white bg-purple-700 hover:bg-purple-800 py-2 px-2 rounded transition"
+                  className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 py-2 px-2 rounded transition"
                   onClick={() => setIsOpen(false)}
                 >
                   + Create Listing
@@ -90,7 +90,7 @@ export default function MobileMenu() {
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="font-semibold text-white bg-purple-700 hover:bg-purple-800 py-2 px-2 rounded transition"
+                  className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 py-2 px-2 rounded transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Sell Your Car

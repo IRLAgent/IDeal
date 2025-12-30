@@ -16,7 +16,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const error: ApiError = {
       status: response.status,
-      message: data.message || 'An error occurred',
+      message: data.error || data.message || 'An error occurred',
     };
     throw error;
   }

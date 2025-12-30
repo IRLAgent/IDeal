@@ -82,11 +82,11 @@ export default function SearchPage() {
           <div className="bg-white p-6 rounded-lg shadow sticky top-24">
             <div 
               onClick={() => setFiltersOpen(!filtersOpen)}
-              className="flex justify-between items-center mb-6 cursor-pointer lg:cursor-default hover:bg-gray-50 lg:hover:bg-transparent p-2 rounded transition lg:p-0"
+              className="flex justify-between items-center mb-6 cursor-pointer lg:cursor-default lg:pointer-events-none hover:bg-gray-50 lg:hover:bg-transparent p-2 rounded transition lg:p-0"
             >
               <h2 className="text-2xl font-bold">Filters</h2>
               <button
-                className="lg:hidden text-purple-900 hover:text-purple-950 transition"
+                className="lg:hidden text-indigo-950 hover:text-indigo-950 transition"
                 aria-label="Toggle filters"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,8 +99,7 @@ export default function SearchPage() {
               </button>
             </div>
 
-            {filtersOpen && (
-              <div className="space-y-4">
+            <div className={`space-y-4 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Make</label>
                 <select
@@ -167,11 +166,10 @@ export default function SearchPage() {
                 </select>
               </div>
 
-              <button onClick={handleApplyFilters} className="w-full bg-purple-900 text-white p-2 rounded font-bold hover:bg-purple-950">
+              <button onClick={handleApplyFilters} className="w-full bg-indigo-950 text-white p-2 rounded font-bold hover:bg-indigo-950">
                 Apply Filters
               </button>
             </div>
-            )}
           </div>
         </aside>
 
@@ -217,8 +215,8 @@ export default function SearchPage() {
                     <p className="text-gray-600 mb-2">
                       {car.mileage.toLocaleString()} km • {car.location}
                     </p>
-                    <p className="text-2xl font-bold text-purple-900 mb-4">€{car.price.toLocaleString()}</p>
-                    <button className="w-full bg-purple-900 text-white p-2 rounded hover:bg-purple-950 transition">
+                    <p className="text-2xl font-bold text-indigo-950 mb-4">€{car.price.toLocaleString()}</p>
+                    <button className="w-full bg-indigo-950 text-white p-2 rounded hover:bg-indigo-950 transition">
                       View Details
                     </button>
                   </div>

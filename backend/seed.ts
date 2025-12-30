@@ -7,7 +7,7 @@
 
 import axios from 'axios';
 
-const API_URL = process.env.API_URL || 'https://ideal-production.up.railway.app/api';
+const API_URL = process.env.API_URL || 'http://localhost:5000/api';
 
 interface SeedUser {
   email: string;

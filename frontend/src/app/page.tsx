@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-purple-900 text-white rounded-lg p-8 md:p-12 mb-12 border-2 border-purple-700">
+      <section className="bg-indigo-950 text-white rounded-lg p-8 md:p-12 mb-12 border-2 border-indigo-900">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
           Find Your Perfect Car
         </h1>
@@ -29,7 +29,7 @@ export default function Home() {
         </p>
 
         {/* Search Form */}
-        <form onSubmit={handleSearch} className="bg-white text-gray-900 p-6 rounded-lg max-w-2xl border border-purple-700">
+        <form onSubmit={handleSearch} className="bg-white text-gray-900 p-6 rounded-lg max-w-2xl border border-indigo-900">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <input
               type="text"
@@ -67,7 +67,7 @@ export default function Home() {
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-900 text-white p-3 rounded font-bold hover:bg-purple-950 transition shadow-lg"
+            className="w-full bg-indigo-950 text-white p-3 rounded font-bold hover:bg-indigo-950 transition shadow-lg"
           >
             Search Cars
           </button>
@@ -78,31 +78,31 @@ export default function Home() {
       <section className="mb-12">
         <h2 className="text-3xl font-bold mb-8 text-white">Browse by Category</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="card border-l-4 border-purple-900 hover:shadow-xl hover:shadow-purple-900/20 transition">
-            <h3 className="font-bold text-lg mb-2 text-purple-900">Used Cars</h3>
+          <div className="card border-l-4 border-indigo-950 hover:shadow-xl hover:shadow-indigo-950/20 transition">
+            <h3 className="font-bold text-lg mb-2 text-indigo-950">Used Cars</h3>
             <p className="text-gray-600">Browse used vehicles from private sellers</p>
-            <a href="/search?type=used" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
+            <a href="/search?type=used" className="text-indigo-950 font-semibold mt-4 inline-block hover:text-indigo-950 transition">
               View All →
             </a>
           </div>
-          <div className="card border-l-4 border-purple-900 hover:shadow-xl hover:shadow-purple-900/20 transition">
-            <h3 className="font-bold text-lg mb-2 text-purple-900">Dealer Cars</h3>
+          <div className="card border-l-4 border-indigo-950 hover:shadow-xl hover:shadow-indigo-950/20 transition">
+            <h3 className="font-bold text-lg mb-2 text-indigo-950">Dealer Cars</h3>
             <p className="text-gray-600">New and certified dealer inventory</p>
-            <a href="/search?type=dealer" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
+            <a href="/search?type=dealer" className="text-indigo-950 font-semibold mt-4 inline-block hover:text-indigo-950 transition">
               View All →
             </a>
           </div>
           <div className="card">
-            <h3 className="font-bold text-lg mb-2 text-purple-900">Sell Your Car</h3>
+            <h3 className="font-bold text-lg mb-2 text-indigo-950">Sell Your Car</h3>
             <p className="text-gray-600">Quick and easy listing process</p>
-            <a href="/auth/signup" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
+            <a href="/auth/signup" className="text-indigo-950 font-semibold mt-4 inline-block hover:text-indigo-950 transition">
               Get Started →
             </a>
           </div>
           <div className="card">
-            <h3 className="font-bold text-lg mb-2 text-purple-900">Value My Car</h3>
+            <h3 className="font-bold text-lg mb-2 text-indigo-950">Value My Car</h3>
             <p className="text-gray-600">Get instant car valuation</p>
-            <a href="#" className="text-purple-900 font-semibold mt-4 inline-block hover:text-purple-950 transition">
+            <a href="#" className="text-indigo-950 font-semibold mt-4 inline-block hover:text-indigo-950 transition">
               Check Now →
             </a>
           </div>
@@ -122,7 +122,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-lg mb-2">Car Make & Model</h3>
               <p className="text-gray-600 mb-4">2020 | 50,000 km | Location</p>
-              <p className="text-2xl font-bold text-purple-900">€15,990</p>
+              <p className="text-2xl font-bold text-indigo-950">€15,990</p>
             </div>
           ))}
         </div>

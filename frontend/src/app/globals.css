@@ -42,7 +42,7 @@ main {
 }
 
 .btn-primary {
-  @apply bg-purple-900 text-white px-4 py-2 rounded font-semibold hover:bg-purple-950 transition shadow-lg;
+  @apply bg-indigo-950 text-white px-4 py-2 rounded font-semibold hover:bg-indigo-950 transition shadow-lg;
 }
 
 .btn-secondary {
@@ -51,15 +51,15 @@ main {
 
 /* Form styles - global */
 .form-input {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-gray-900;
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950 text-gray-900;
 }
 
 .form-select {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-gray-900 bg-white;
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950 text-gray-900 bg-white;
 }
 
 .form-textarea {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-900 text-gray-900;
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950 text-gray-900;
 }
 
 .form-label {

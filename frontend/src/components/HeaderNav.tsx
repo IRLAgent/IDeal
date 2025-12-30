@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { isAuthenticated } from '@/lib/auth';
+import { isAuthenticated, clearAuth } from '@/lib/auth';
 
 export default function HeaderNav() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -14,8 +14,8 @@ export default function HeaderNav() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
+    clearAuth();
+    setAuthenticated(false);
     window.location.href = '/';
   };
 
@@ -46,7 +46,7 @@ export default function HeaderNav() {
           <Link href="/dashboard" className="hover:text-gray-200 transition">
             Dashboard
           </Link>
-          <Link href="/listing/create" className="font-semibold text-white bg-purple-700 hover:bg-purple-800 px-3 py-1 rounded transition">
+          <Link href="/listing/create" className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 px-3 py-1 rounded transition">
             + Create Listing
           </Link>
           <button
@@ -61,7 +61,7 @@ export default function HeaderNav() {
           <Link href="/auth/login" className="hover:text-gray-200 transition">
             Sign In
           </Link>
-          <Link href="/auth/signup" className="font-semibold text-white bg-purple-700 hover:bg-purple-800 px-3 py-1 rounded transition">
+          <Link href="/auth/signup" className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 px-3 py-1 rounded transition">
             Sell Your Car
           </Link>
         </>

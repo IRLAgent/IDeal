@@ -39,6 +39,10 @@ export class AuthController {
       { expiresIn: '24h' }
     );
 
+    console.log('🔑 Token generated for registration:', user.email);
+    console.log('   JWT_SECRET used:', process.env.JWT_SECRET);
+    console.log('   Token (first 20 chars):', token.substring(0, 20) + '...');
+
     return { user: { id: user.id, email: user.email, name: user.name }, token };
   }
 
@@ -61,6 +65,10 @@ export class AuthController {
       process.env.JWT_SECRET || 'secret',
       { expiresIn: '24h' }
     );
+
+    console.log('🔑 Token generated for login:', user.email);
+    console.log('   JWT_SECRET used:', process.env.JWT_SECRET);
+    console.log('   Token (first 20 chars):', token.substring(0, 20) + '...');
 
     return { user: { id: user.id, email: user.email, name: user.name }, token };
   }
