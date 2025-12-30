@@ -210,22 +210,22 @@ export default function DashboardPage() {
                         <p className="text-gray-600">{car.mileage.toLocaleString()} km • {car.location}</p>
                         <p className="font-bold text-indigo-950 mt-2">€{car.price.toLocaleString()}</p>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2 justify-center">
                         <Link
                           href={`/listing/${car.id}`}
-                          className="px-4 py-2 border border-indigo-950 text-indigo-950 rounded hover:bg-indigo-50"
+                          className="px-6 py-2 bg-indigo-950 text-white rounded-md hover:bg-indigo-900 transition text-center font-semibold text-sm whitespace-nowrap"
                         >
                           View
                         </Link>
                         <Link
                           href={`/listing/${car.id}/edit`}
-                          className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+                          className="px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-center font-semibold text-sm whitespace-nowrap"
                         >
                           Edit
                         </Link>
                         <button
                           onClick={() => handleDeleteListing(car.id)}
-                          className="px-4 py-2 border border-red-300 text-red-600 rounded hover:bg-red-50"
+                          className="px-6 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition font-semibold text-sm whitespace-nowrap"
                         >
                           Delete
                         </button>
