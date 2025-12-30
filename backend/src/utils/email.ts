@@ -24,7 +24,7 @@ export async function sendMessageNotification({
     return null;
   }
 
-  const fromEmail = process.env.EMAIL_FROM || 'noreply@ideal.ie';
+  const fromEmail = process.env.EMAIL_FROM || 'onboarding@resend.dev';
   
   try {
     const result = await resend.emails.send({
