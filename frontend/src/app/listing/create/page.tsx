@@ -91,7 +91,7 @@ export default function CreateListingPage() {
       });
 
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-      const uploadResponse = await fetch(`${apiBaseUrl}/upload/upload`, {
+      const uploadResponse = await fetch(`${apiBaseUrl}/upload`, {
         method: 'POST',
         body: formDataForUpload,
         headers: {

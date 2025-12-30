@@ -24,7 +24,7 @@ const upload = multer({
 
 // Upload multiple images endpoint
 router.post(
-  '/upload',
+  '/',
   authMiddleware,
   upload.array('files', 10), // Max 10 files
   async (req: AuthRequest, res: Response) => {
