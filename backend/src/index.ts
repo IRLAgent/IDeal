@@ -7,6 +7,18 @@ import carRoutes from './routes/cars';
 import messageRoutes from './routes/messages';
 import uploadRoutes from './routes/upload';
 
+// Debug: Log environment variable status at startup
+console.log('🚀 Starting IDeal.ie Backend API');
+console.log('📋 Environment Check:');
+console.log('   NODE_ENV:', process.env.NODE_ENV);
+console.log('   PORT:', process.env.PORT);
+console.log('   DATABASE_URL:', process.env.DATABASE_URL ? '✓ Set' : '✗ Missing');
+console.log('   JWT_SECRET:', process.env.JWT_SECRET ? '✓ Set' : '✗ Missing');
+console.log('   CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? `✓ ${process.env.CLOUDINARY_CLOUD_NAME}` : '✗ Missing');
+console.log('   CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? '✓ Set' : '✗ Missing');
+console.log('   CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '✓ Set' : '✗ Missing');
+console.log('');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
