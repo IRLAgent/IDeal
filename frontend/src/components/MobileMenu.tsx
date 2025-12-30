@@ -63,6 +63,13 @@ export default function MobileMenu() {
                   Dashboard
                 </Link>
                 <Link
+                  href="/messages"
+                  className="hover:text-gray-200 transition py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Messages
+                </Link>
+                <Link
                   href="/listing/create"
                   className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 py-2 px-2 rounded transition"
                   onClick={() => setIsOpen(false)}

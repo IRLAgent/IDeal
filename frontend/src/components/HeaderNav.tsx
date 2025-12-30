@@ -46,6 +46,9 @@ export default function HeaderNav() {
           <Link href="/dashboard" className="hover:text-gray-200 transition">
             Dashboard
           </Link>
+          <Link href="/messages" className="hover:text-gray-200 transition">
+            Messages
+          </Link>
           <Link href="/listing/create" className="font-semibold text-white bg-indigo-900 hover:bg-indigo-950 px-3 py-1 rounded transition">
             + Create Listing
           </Link>

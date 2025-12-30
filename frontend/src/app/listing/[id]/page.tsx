@@ -66,6 +66,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
       const token = getAuthToken();
       if (!token) {
         setMessageError('Please log in to send a message');
+        setSendingMessage(false);
         return;
       }
 
@@ -73,10 +74,13 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         '/messages',
         {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({
+            toUserId: listing?.userId,
             carId: params.id,
-            recipientId: listing?.userId,
-            content: messageText,
+            messageText: messageText.trim(),
           }),
         },
         token
