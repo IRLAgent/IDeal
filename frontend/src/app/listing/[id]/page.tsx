@@ -34,6 +34,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
   const [sendingMessage, setSendingMessage] = useState(false);
   const [messageError, setMessageError] = useState('');
   const [messageSuccess, setMessageSuccess] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const currentUser = getUser();
 
   useEffect(() => {
@@ -96,6 +97,54 @@ export default function ListingPage({ params }: { params: { id: string } }) {
     }
   };
 
+  const handlePreviousImage = () => {
+    if (listing && listing.photoUrls.length > 0) {
+      setSelectedImageIndex((prev) => 
+        prev === 0 ? listing.photoUrls.length - 1 : prev - 1
+      );
+    }
+  };
+
+  const handleNextImage = () => {
+    if (listing && listing.photoUrls.length > 0) {
+      setSelectedImageIndex((prev) => 
+        prev === listing.photoUrls.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const handleThumbnailClick = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') {
+      handlePreviousImage();
+    } else if (e.key === 'ArrowRight') {
+      handleNextImage();
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    (e.currentTarget as any).touchStartX = touch.clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touch = e.changedTouches[0];
+    const touchStartX = (e.currentTarget as any).touchStartX;
+    const diff = touchStartX - touch.clientX;
+
+    // Swipe threshold: 50px
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        handleNextImage(); // Swipe left
+      } else {
+        handlePreviousImage(); // Swipe right
+      }
+    }
+  };
+
   if (loading) {
     return (
       <main>
@@ -123,22 +172,80 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-2">
           {/* Gallery */}
           <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
-            <div className="w-full h-96 bg-gray-300 flex items-center justify-center mb-4 overflow-hidden">
-              {listing.photoUrls && listing.photoUrls.length > 0 ? (
-                <img src={listing.photoUrls[0]} alt={`${listing.make} ${listing.model}`} className="w-full h-full object-cover" />
-              ) : (
+            {listing.photoUrls && listing.photoUrls.length > 0 ? (
+              <>
+                {/* Main Image */}
+                <div 
+                  className="relative w-full h-96 md:h-[500px] bg-gray-900 flex items-center justify-center group"
+                  onKeyDown={handleKeyDown}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  tabIndex={0}
+                >
+                  <img 
+                    src={listing.photoUrls[selectedImageIndex]} 
+                    alt={`${listing.make} ${listing.model} - Image ${selectedImageIndex + 1}`} 
+                    className="w-full h-full object-contain"
+                  />
+                  
+                  {/* Navigation Arrows */}
+                  {listing.photoUrls.length > 1 && (
+                    <>
+                      <button
+                        onClick={handlePreviousImage}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Previous image"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={handleNextImage}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Next image"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                      
+                      {/* Image Counter */}
+                      <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+                        {selectedImageIndex + 1} / {listing.photoUrls.length}
+                      </div>
+                    </>
+                  )}
+                </div>
+                
+                {/* Thumbnails */}
+                {listing.photoUrls.length > 1 && (
+                  <div className="flex gap-2 p-4 overflow-x-auto">
+                    {listing.photoUrls.map((url, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleThumbnailClick(i)}
+                        className={`w-20 h-20 flex-shrink-0 rounded overflow-hidden border-2 transition-all ${
+                          i === selectedImageIndex 
+                            ? 'border-indigo-950 ring-2 ring-indigo-950' 
+                            : 'border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        <img 
+                          src={url} 
+                          alt={`Thumbnail ${i + 1}`} 
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="w-full h-96 bg-gray-300 flex items-center justify-center">
                 <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                 </svg>
-              )}
-            </div>
-            {listing.photoUrls && listing.photoUrls.length > 0 && (
-              <div className="flex gap-2 p-4 overflow-x-auto">
-                {listing.photoUrls.map((url, i) => (
-                  <div key={i} className="w-20 h-20 bg-gray-300 rounded flex-shrink-0 cursor-pointer hover:opacity-70 overflow-hidden">
-                    <img src={url} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
               </div>
             )}
           </div>
@@ -155,26 +262,26 @@ export default function ListingPage({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <p className="text-gray-600">Year</p>
-                <p className="font-bold text-lg">2020</p>
+                <p className="font-bold text-lg">{listing.year}</p>
               </div>
               <div>
                 <p className="text-gray-600">Mileage</p>
-                <p className="font-bold text-lg">45,000 km</p>
+                <p className="font-bold text-lg">{listing.mileage.toLocaleString()} km</p>
               </div>
               <div>
                 <p className="text-gray-600">Fuel Type</p>
-                <p className="font-bold text-lg">Petrol</p>
+                <p className="font-bold text-lg">{listing.fuelType}</p>
               </div>
               <div>
                 <p className="text-gray-600">Transmission</p>
-                <p className="font-bold text-lg">Manual</p>
+                <p className="font-bold text-lg">{listing.transmission || 'Manual'}</p>
               </div>
             </div>
 
             <div>
               <h3 className="font-bold text-lg mb-2">Description</h3>
-              <p className="text-gray-700">
-                Excellent condition BMW 3 Series with full service history. Recently serviced, new brakes, and new tires. All paperwork available. No accidents or damage.
+              <p className="text-gray-700 whitespace-pre-wrap">
+                {listing.description || 'No description available.'}
               </p>
             </div>
           </div>
