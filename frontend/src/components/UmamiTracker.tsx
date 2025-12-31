@@ -4,21 +4,44 @@ import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 /**
- * Component to track page views in Single Page Applications
- * Umami automatically tracks the initial page load, but we need to manually
- * track route changes in Next.js App Router
+ * Component to load Umami script and track page views
  */
 export default function UmamiTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Load Umami script on mount
   useEffect(() => {
-    // Track page view on route change using Umami's pageview tracking
-    // The script automatically tracks initial page loads, this handles SPA navigation
+    const script = document.createElement('script');
+    script.src = `${process.env.NEXT_PUBLIC_UMAMI_URL}/script.js`;
+    script.setAttribute('data-website-id', process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || '');
+    script.async = true;
+    script.defer = true;
+    
+    script.onload = () => {
+      console.log('✅ Umami script loaded successfully');
+      console.log('window.umami:', (window as any).umami);
+    };
+    
+    script.onerror = () => {
+      console.error('❌ Failed to load Umami script');
+    };
+    
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup on unmount
+      const scripts = document.querySelectorAll(`script[src*="umami"]`);
+      scripts.forEach(s => s.remove());
+    };
+  }, []);
+
+  // Track route changes
+  useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).umami) {
-      const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
-      // Use umami.track for page views in SPA mode
-      (window as any).umami.track('pageview', { url });
+      const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+      console.log('📊 Tracking page view:', url);
+      (window as any).umami.track((props: any) => ({ ...props, url }));
     }
   }, [pathname, searchParams]);
 
