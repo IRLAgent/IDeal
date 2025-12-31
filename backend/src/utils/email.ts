@@ -28,9 +28,9 @@ export async function sendMessageNotification({
   
   try {
     const result = await resend.emails.send({
-      from: `IDeal.ie <${fromEmail}>`,
+      from: `i-deal.ie <${fromEmail}>`,
       to: toEmail,
-      replyTo: 'support@ideal.ie',
+      replyTo: 'support@i-deal.ie',
       subject: carTitle 
         ? `New message about your ${carTitle}` 
         : 'You have a new message on IDeal.ie',
