@@ -180,22 +180,44 @@ function SearchContent() {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">Price Range</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={filters.priceMin}
-                    onChange={(e) => handleFilterChange('priceMin', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded text-sm"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    value={filters.priceMax}
-                    onChange={(e) => handleFilterChange('priceMax', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded text-sm"
-                  />
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Price Range: €{filters.priceMin || '0'} - €{filters.priceMax || '100,000+'}
+                </label>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-gray-600 text-xs mb-1">Minimum Price</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100000"
+                      step="1000"
+                      value={filters.priceMin || '0'}
+                      onChange={(e) => handleFilterChange('priceMin', e.target.value)}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-950"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>€0</span>
+                      <span>€50k</span>
+                      <span>€100k</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-gray-600 text-xs mb-1">Maximum Price</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100000"
+                      step="1000"
+                      value={filters.priceMax || '100000'}
+                      onChange={(e) => handleFilterChange('priceMax', e.target.value)}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-950"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>€0</span>
+                      <span>€50k</span>
+                      <span>€100k+</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
