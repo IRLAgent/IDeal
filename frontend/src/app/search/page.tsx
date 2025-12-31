@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { IRISH_COUNTIES } from '@/constants/counties';
 import { apiCall } from '@/lib/api';
 import { getThumbnailUrl } from '@/utils/image';
+import { trackSearch } from '@/utils/analytics';
 
 interface Car {
   id: string;
@@ -50,8 +51,11 @@ function SearchContent() {
       const params = new URLSearchParams();
       if (filters.make) params.append('make', filters.make);
       if (filters.model) params.append('model', filters.model);
-      if (filters.priceMin) params.append('minPrice', filters.priceMin);
-      if (filters.priceMax) params.append('maxPrice', filters.priceMax);
+      // Always send price filters if they have values (including 0)
+      const minPrice = filters.priceMin || '0';
+      const maxPrice = filters.priceMax || '100000';
+      params.append('minPrice', minPrice);
+      params.append('maxPrice', maxPrice);
       if (filters.location) params.append('location', filters.location);
       if (filters.fuelType) params.append('fuelType', filters.fuelType);
       if (sellerId) params.append('userId', sellerId);
@@ -61,6 +65,16 @@ function SearchContent() {
       });
 
       setCars(response.cars);
+      
+      // Track search
+      trackSearch({
+        make: filters.make || undefined,
+        model: filters.model || undefined,
+        minPrice: filters.priceMin ? parseInt(filters.priceMin) : undefined,
+        maxPrice: filters.priceMax ? parseInt(filters.priceMax) : undefined,
+        county: filters.location || undefined,
+        seller: sellerId || undefined,
+      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load cars';
       setError(errorMessage);

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { apiCall, apiCallAuth } from '@/lib/api';
 import { getAuthToken, getUser } from '@/lib/auth';
 import { getThumbnailUrl, getOptimizedUrl } from '@/utils/image';
+import { trackListingView, trackMessageSent } from '@/utils/analytics';
 
 interface Car {
   id: string;
@@ -56,6 +57,9 @@ export default function ListingPage({ params }: { params: { id: string } }) {
       if (response.user) {
         setSeller(response.user);
       }
+      
+      // Track listing view
+      trackListingView(response.id, response.make, response.model);
     } catch (err) {
       console.error('Failed to load listing');
     } finally {
@@ -98,6 +102,11 @@ export default function ListingPage({ params }: { params: { id: string } }) {
       setMessageSuccess(true);
       setMessageText('');
       setTimeout(() => setMessageSuccess(false), 3000);
+      
+      // Track message sent
+      if (listing?.userId) {
+        trackMessageSent(listing.userId, params.id);
+      }
     } catch (err) {
       setMessageError(err instanceof Error ? err.message : 'Failed to send message');
     } finally {

@@ -41,15 +41,21 @@ export class CarController {
     const skip = filters?.skip || 0;
     const take = filters?.take || 20;
 
+    // Build price filter only if values are provided
+    const priceFilter: any = {};
+    if (filters?.priceMin !== undefined) {
+      priceFilter.gte = filters.priceMin;
+    }
+    if (filters?.priceMax !== undefined) {
+      priceFilter.lte = filters.priceMax;
+    }
+
     return await prisma.car.findMany({
       where: {
         status: 'active',
         make: filters?.make ? { contains: filters.make } : undefined,
         model: filters?.model ? { contains: filters.model } : undefined,
-        price: {
-          gte: filters?.priceMin || 0,
-          lte: filters?.priceMax || 999999,
-        },
+        price: Object.keys(priceFilter).length > 0 ? priceFilter : undefined,
         location: filters?.location ? { contains: filters.location } : undefined,
         fuelType: filters?.fuelType ? { contains: filters.fuelType } : undefined,
         userId: filters?.userId || undefined,

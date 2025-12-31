@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { apiCall } from '@/lib/api';
 import { setAuthToken, AuthResponse } from '@/lib/auth';
+import { trackAuth } from '@/utils/analytics';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -24,6 +25,9 @@ export default function LoginPage() {
 
       // Store token and user info
       setAuthToken(response.token, response.user);
+
+      // Track login
+      trackAuth('login');
 
       // Redirect to dashboard with full page reload to update header auth state
       window.location.href = '/dashboard';

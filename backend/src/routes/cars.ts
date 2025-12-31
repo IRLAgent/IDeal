@@ -35,6 +35,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
       priceMin: priceMin ? parseInt(priceMin as string) : undefined,
       priceMax: priceMax ? parseInt(priceMax as string) : undefined,
       location: location as string,
+      fuelType: fuelType as string,
       userId: userId as string,
       skip: skip ? parseInt(skip as string) : 0,
       take: take ? parseInt(take as string) : 20,

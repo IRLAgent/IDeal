@@ -7,6 +7,7 @@ import { apiCallAuth } from '@/lib/api';
 import { isAuthenticated, getAuthToken } from '@/lib/auth';
 import { IRISH_COUNTIES } from '@/constants/counties';
 import { CAR_MAKES, getModelsForMake, FUEL_TYPES, TRANSMISSIONS } from '@/constants/carData';
+import { trackListingCreated, trackPhotoUpload } from '@/utils/analytics';
 
 export const dynamic = 'force-dynamic';
 
@@ -117,6 +118,9 @@ export default function CreateListingPage() {
       const uploadData = await uploadResponse.json();
       const photoUrls = uploadData.urls;
 
+      // Track photo upload
+      trackPhotoUpload(photoFiles.length);
+
       // Create car listing with uploaded photo URLs
       await apiCallAuth('/cars', {
         method: 'POST',
@@ -136,6 +140,9 @@ export default function CreateListingPage() {
           photoUrls,
         }),
       }, token);
+
+      // Track listing created
+      trackListingCreated(formData.make, formData.model, Number(formData.price));
 
       // Redirect to dashboard
       router.push('/dashboard');

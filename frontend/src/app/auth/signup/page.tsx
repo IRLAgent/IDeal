@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiCall } from '@/lib/api';
 import { setAuthToken, AuthResponse } from '@/lib/auth';
+import { trackAuth } from '@/utils/analytics';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -54,6 +55,9 @@ export default function SignupPage() {
 
       // Store token and user info
       setAuthToken(response.token, response.user);
+
+      // Track signup
+      trackAuth('signup');
 
       // Redirect to dashboard
       router.push('/dashboard');
