@@ -78,6 +78,17 @@ export class CarController {
     });
   }
 
+  static async incrementViewCount(id: string) {
+    return await prisma.car.update({
+      where: { id },
+      data: {
+        viewCount: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
   static async updateCar(
     id: string,
     userId: string,

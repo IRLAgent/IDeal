@@ -20,6 +20,7 @@ interface Car {
   description: string;
   photoUrls: string[];
   createdAt: string;
+  viewCount?: number;
 }
 
 function SearchContent() {
@@ -350,7 +351,18 @@ function SearchContent() {
                     <p className="text-gray-600 mb-2">
                       {car.mileage.toLocaleString()} km • {car.location}
                     </p>
-                    <p className="text-2xl font-bold text-indigo-950 mb-4">€{car.price.toLocaleString()}</p>
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-2xl font-bold text-indigo-950">€{car.price.toLocaleString()}</p>
+                      {car.viewCount !== undefined && car.viewCount > 0 && (
+                        <div className="flex items-center gap-1 text-gray-500 text-sm">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          <span>{car.viewCount}</span>
+                        </div>
+                      )}
+                    </div>
                     <div className="w-full bg-indigo-950 text-white p-2 rounded hover:bg-indigo-900 transition text-center">
                       View Details
                     </div>

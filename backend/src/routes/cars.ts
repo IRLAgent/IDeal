@@ -81,6 +81,16 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Increment view count for a car listing
+router.post('/:id/view', async (req: AuthRequest, res: Response) => {
+  try {
+    await CarController.incrementViewCount(req.params.id);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create car (authenticated)
 router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {

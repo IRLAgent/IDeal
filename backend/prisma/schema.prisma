@@ -45,6 +45,7 @@ model Car {
   description   String
   photoUrls     String     @default("[]")  // JSON string array of photo URLs
   status        String     @default("active") // "active", "sold", "draft"
+  viewCount     Int        @default(0) // Number of times listing has been viewed
 
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
