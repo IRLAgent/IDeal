@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { apiCall, apiCallAuth } from '@/lib/api';
 import { getAuthToken, getUser } from '@/lib/auth';
 
@@ -326,9 +327,12 @@ export default function ListingPage({ params }: { params: { id: string } }) {
                   </a>
                 </p>
               )}
-              <button className="w-full border border-indigo-950 text-indigo-950 p-2 rounded hover:bg-indigo-50 text-sm">
+              <Link 
+                href={`/search?seller=${listing.userId}`}
+                className="w-full border border-indigo-950 text-indigo-950 p-2 rounded hover:bg-indigo-50 text-sm block text-center"
+              >
                 View Other Listings
-              </button>
+              </Link>
             </div>
 
             {/* Message Form */}

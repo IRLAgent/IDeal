@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { IRISH_COUNTIES } from '@/constants/counties';
 import { apiCall } from '@/lib/api';
 
@@ -19,7 +20,10 @@ interface Car {
   createdAt: string;
 }
 
-export default function SearchPage() {
+function SearchContent() {
+  const searchParams = useSearchParams();
+  const sellerId = searchParams.get('seller');
+  
   const [filters, setFilters] = useState({
     make: '',
     model: '',
@@ -46,6 +50,7 @@ export default function SearchPage() {
       if (filters.priceMax) params.append('maxPrice', filters.priceMax);
       if (filters.location) params.append('location', filters.location);
       if (filters.fuelType) params.append('fuelType', filters.fuelType);
+      if (sellerId) params.append('userId', sellerId);
 
       const response = await apiCall<{ cars: Car[] }>(`/cars?${params.toString()}`, {
         method: 'GET',
@@ -176,6 +181,14 @@ export default function SearchPage() {
 
         {/* Results */}
         <div className="lg:col-span-3">
+          {sellerId && (
+            <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-lg mb-6">
+              <p className="text-indigo-950 font-semibold">
+                Viewing listings from this seller
+              </p>
+            </div>
+          )}
+          
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-3xl font-bold">
               Search Results {cars.length > 0 && `(${cars.length})`}
@@ -232,5 +245,19 @@ export default function SearchPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <main>
+        <div className="text-center py-12">
+          <p className="text-gray-600">Loading search...</p>
+        </div>
+      </main>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }

@@ -34,6 +34,7 @@ export class CarController {
     priceMax?: number;
     location?: string;
     fuelType?: string;
+    userId?: string;
     skip?: number;
     take?: number;
   }) {
@@ -51,6 +52,7 @@ export class CarController {
         },
         location: filters?.location ? { contains: filters.location } : undefined,
         fuelType: filters?.fuelType ? { contains: filters.fuelType } : undefined,
+        userId: filters?.userId || undefined,
       },
       include: { user: true },
       skip,

@@ -7,13 +7,14 @@ const router = Router();
 // Get all cars (public)
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
-    const { make, model, priceMin, priceMax, location, fuelType, skip, take } = req.query;
+    const { make, model, priceMin, priceMax, location, fuelType, userId, skip, take } = req.query;
     const cars = await CarController.getCars({
       make: make as string,
       model: model as string,
       priceMin: priceMin ? parseInt(priceMin as string) : undefined,
       priceMax: priceMax ? parseInt(priceMax as string) : undefined,
       location: location as string,
+      userId: userId as string,
       skip: skip ? parseInt(skip as string) : 0,
       take: take ? parseInt(take as string) : 20,
     });
