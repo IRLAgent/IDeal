@@ -39,6 +39,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
   const [messageError, setMessageError] = useState('');
   const [messageSuccess, setMessageSuccess] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const currentUser = getUser();
 
   useEffect(() => {
@@ -124,6 +125,20 @@ export default function ListingPage({ params }: { params: { id: string } }) {
     setSelectedImageIndex(index);
   };
 
+  const handleImageClick = () => {
+    setIsLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+  };
+
+  const handleLightboxKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       handlePreviousImage();
@@ -192,8 +207,10 @@ export default function ListingPage({ params }: { params: { id: string } }) {
                   <img 
                     src={getOptimizedUrl(listing.photoUrls[selectedImageIndex])} 
                     alt={`${listing.make} ${listing.model} - Image ${selectedImageIndex + 1}`} 
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain cursor-pointer"
                     loading="eager"
+                    onClick={handleImageClick}
+                    title="Click to view full size"
                   />
                   
                   {/* Navigation Arrows */}
@@ -408,6 +425,67 @@ export default function ListingPage({ params }: { params: { id: string } }) {
           ))}
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {isLightboxOpen && listing && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          onClick={closeLightbox}
+          onKeyDown={handleLightboxKeyDown}
+          tabIndex={0}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition"
+            aria-label="Close lightbox"
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          
+          <div className="relative max-w-7xl max-h-full" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={listing.photoUrls[selectedImageIndex]} 
+              alt={`${listing.make} ${listing.model} - Full size image ${selectedImageIndex + 1}`}
+              className="max-w-full max-h-[90vh] object-contain"
+            />
+            
+            {listing.photoUrls.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePreviousImage();
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition"
+                  aria-label="Previous image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextImage();
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition"
+                  aria-label="Next image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+                
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full">
+                  {selectedImageIndex + 1} / {listing.photoUrls.length}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
