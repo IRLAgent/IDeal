@@ -181,42 +181,57 @@ function SearchContent() {
 
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">
-                  Price Range: €{filters.priceMin || '0'} - €{filters.priceMax || '100,000+'}
+                  Price Range: €{(parseInt(filters.priceMin) || 0).toLocaleString()} - €{(parseInt(filters.priceMax) || 100000).toLocaleString()}
                 </label>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-gray-600 text-xs mb-1">Minimum Price</label>
+                <div className="relative pt-1 pb-8">
+                  <div className="relative h-2 bg-gray-200 rounded-lg">
+                    {/* Range track between thumbs */}
+                    <div 
+                      className="absolute h-2 bg-indigo-950 rounded-lg"
+                      style={{
+                        left: `${((parseInt(filters.priceMin) || 0) / 100000) * 100}%`,
+                        right: `${100 - ((parseInt(filters.priceMax) || 100000) / 100000) * 100}%`
+                      }}
+                    />
+                    {/* Min slider */}
                     <input
                       type="range"
                       min="0"
                       max="100000"
                       step="1000"
                       value={filters.priceMin || '0'}
-                      onChange={(e) => handleFilterChange('priceMin', e.target.value)}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-950"
+                      onChange={(e) => {
+                        const newMin = parseInt(e.target.value);
+                        const currentMax = parseInt(filters.priceMax) || 100000;
+                        if (newMin <= currentMax) {
+                          handleFilterChange('priceMin', e.target.value);
+                        }
+                      }}
+                      className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>€0</span>
-                      <span>€50k</span>
-                      <span>€100k</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-gray-600 text-xs mb-1">Maximum Price</label>
+                    {/* Max slider */}
                     <input
                       type="range"
                       min="0"
                       max="100000"
                       step="1000"
                       value={filters.priceMax || '100000'}
-                      onChange={(e) => handleFilterChange('priceMax', e.target.value)}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-950"
+                      onChange={(e) => {
+                        const newMax = parseInt(e.target.value);
+                        const currentMin = parseInt(filters.priceMin) || 0;
+                        if (newMax >= currentMin) {
+                          handleFilterChange('priceMax', e.target.value);
+                        }
+                      }}
+                      className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>€0</span>
-                      <span>€50k</span>
-                      <span>€100k+</span>
-                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>€0</span>
+                    <span>€25k</span>
+                    <span>€50k</span>
+                    <span>€75k</span>
+                    <span>€100k</span>
                   </div>
                 </div>
               </div>
