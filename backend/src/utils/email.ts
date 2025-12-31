@@ -88,3 +88,28 @@ export async function sendMessageNotification({
     return null;
   }
 }
+
+// Generic email sending function for contact forms, etc.
+export async function sendEmail(to: string, subject: string, html: string) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY not configured, skipping email');
+    return null;
+  }
+
+  const fromEmail = process.env.EMAIL_FROM || 'noreply@i-deal.ie';
+  
+  try {
+    const result = await resend.emails.send({
+      from: `IDeal.ie <${fromEmail}>`,
+      to,
+      subject,
+      html,
+    });
+
+    console.log('✅ Email sent:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ Failed to send email:', error);
+    return null;
+  }
+}
