@@ -52,7 +52,6 @@ export default function ListingPage({ params }: { params: { id: string } }) {
     setLoading(true);
     try {
       const response = await apiCall<Car>(`/cars/${params.id}`, { method: 'GET' });
-      setListing(response);
       
       // Set seller from response
       if (response.user) {
@@ -62,9 +61,13 @@ export default function ListingPage({ params }: { params: { id: string } }) {
       // Increment view count
       try {
         await apiCall(`/cars/${params.id}/view`, { method: 'POST' });
+        // Update the listing with incremented view count
+        response.viewCount = (response.viewCount || 0) + 1;
       } catch (err) {
         console.error('Failed to track view:', err);
       }
+      
+      setListing(response);
       
       // Track listing view in analytics
       trackListingView(response.id, response.make, response.model);
