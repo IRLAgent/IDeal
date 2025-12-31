@@ -30,6 +30,7 @@ export async function sendMessageNotification({
     const result = await resend.emails.send({
       from: `IDeal.ie <${fromEmail}>`,
       to: toEmail,
+      replyTo: 'support@ideal.ie',
       subject: carTitle 
         ? `New message about your ${carTitle}` 
         : 'You have a new message on IDeal.ie',

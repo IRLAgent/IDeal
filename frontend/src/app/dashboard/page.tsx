@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiCallAuth } from '@/lib/api';
 import { getAuthToken, getUser, isAuthenticated } from '@/lib/auth';
+import { getThumbnailUrl } from '@/utils/image';
 
 interface Car {
   id: string;
@@ -267,7 +268,12 @@ export default function DashboardPage() {
                     <div key={car.id} className="bg-white rounded-lg shadow p-4 flex gap-4 hover:shadow-lg transition">
                       <Link href={`/listing/${car.id}`} className="w-24 h-24 bg-gray-300 rounded flex-shrink-0 overflow-hidden">
                         {car.photoUrls && car.photoUrls.length > 0 ? (
-                          <img src={car.photoUrls[0]} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover" />
+                          <img 
+                            src={getThumbnailUrl(car.photoUrls[0], 150, 150)} 
+                            alt={`${car.make} ${car.model}`} 
+                            className="w-full h-full object-cover" 
+                            loading="lazy"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gray-200">
                             <span className="text-gray-400 text-sm">No image</span>

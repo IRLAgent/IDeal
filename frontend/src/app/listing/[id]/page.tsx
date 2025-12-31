@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { apiCall, apiCallAuth } from '@/lib/api';
 import { getAuthToken, getUser } from '@/lib/auth';
+import { getThumbnailUrl, getOptimizedUrl } from '@/utils/image';
 
 interface Car {
   id: string;
@@ -189,9 +190,10 @@ export default function ListingPage({ params }: { params: { id: string } }) {
                   tabIndex={0}
                 >
                   <img 
-                    src={listing.photoUrls[selectedImageIndex]} 
+                    src={getOptimizedUrl(listing.photoUrls[selectedImageIndex])} 
                     alt={`${listing.make} ${listing.model} - Image ${selectedImageIndex + 1}`} 
                     className="w-full h-full object-contain"
+                    loading="eager"
                   />
                   
                   {/* Navigation Arrows */}
@@ -238,9 +240,10 @@ export default function ListingPage({ params }: { params: { id: string } }) {
                         }`}
                       >
                         <img 
-                          src={url} 
+                          src={getThumbnailUrl(url, 150, 150)} 
                           alt={`Thumbnail ${i + 1}`} 
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </button>
                     ))}
