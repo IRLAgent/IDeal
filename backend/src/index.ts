@@ -29,6 +29,8 @@ app.use(cors({
   origin: [
     'https://ideal-production.up.railway.app',
     'https://i-deal-cars.vercel.app',
+    'https://i-deal.ie',
+    'https://www.i-deal.ie',
     'http://localhost:3000',
     'http://localhost:3001'
   ],
