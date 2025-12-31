@@ -28,18 +28,26 @@ router.get('/available/models', async (req: AuthRequest, res: Response) => {
 // Get all cars (public)
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
-    const { make, model, priceMin, priceMax, location, fuelType, userId, skip, take } = req.query;
-    const cars = await CarController.getCars({
+    console.log('📥 Full request query:', req.query);
+    console.log('📥 Request URL:', req.url);
+    
+    const { make, model, minPrice, maxPrice, location, fuelType, userId, skip, take } = req.query;
+    
+    const filters = {
       make: make as string,
       model: model as string,
-      priceMin: priceMin ? parseInt(priceMin as string) : undefined,
-      priceMax: priceMax ? parseInt(priceMax as string) : undefined,
+      priceMin: minPrice ? parseInt(minPrice as string) : undefined,
+      priceMax: maxPrice ? parseInt(maxPrice as string) : undefined,
       location: location as string,
       fuelType: fuelType as string,
       userId: userId as string,
       skip: skip ? parseInt(skip as string) : 0,
       take: take ? parseInt(take as string) : 20,
-    });
+    };
+    
+    console.log('🔍 Search filters:', JSON.stringify(filters, null, 2));
+    
+    const cars = await CarController.getCars(filters);
 
     // Parse photoUrls JSON strings and filter out incomplete data
     const parsedCars = cars.map((car: any) => ({

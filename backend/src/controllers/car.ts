@@ -50,16 +50,20 @@ export class CarController {
       priceFilter.lte = filters.priceMax;
     }
 
+    const whereClause = {
+      status: 'active',
+      make: filters?.make ? { contains: filters.make } : undefined,
+      model: filters?.model ? { contains: filters.model } : undefined,
+      price: Object.keys(priceFilter).length > 0 ? priceFilter : undefined,
+      location: filters?.location ? { contains: filters.location } : undefined,
+      fuelType: filters?.fuelType ? { contains: filters.fuelType } : undefined,
+      userId: filters?.userId || undefined,
+    };
+
+    console.log('🔎 Prisma where clause:', JSON.stringify(whereClause, null, 2));
+
     return await prisma.car.findMany({
-      where: {
-        status: 'active',
-        make: filters?.make ? { contains: filters.make } : undefined,
-        model: filters?.model ? { contains: filters.model } : undefined,
-        price: Object.keys(priceFilter).length > 0 ? priceFilter : undefined,
-        location: filters?.location ? { contains: filters.location } : undefined,
-        fuelType: filters?.fuelType ? { contains: filters.fuelType } : undefined,
-        userId: filters?.userId || undefined,
-      },
+      where: whereClause,
       include: { user: true },
       skip,
       take,

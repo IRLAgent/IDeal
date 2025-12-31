@@ -60,6 +60,9 @@ function SearchContent() {
       if (filters.fuelType) params.append('fuelType', filters.fuelType);
       if (sellerId) params.append('userId', sellerId);
 
+      console.log('🔍 Frontend filters:', filters);
+      console.log('📤 Sending params:', params.toString());
+
       const response = await apiCall<{ cars: Car[] }>(`/cars?${params.toString()}`, {
         method: 'GET',
       });
