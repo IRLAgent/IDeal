@@ -10,6 +10,7 @@ export default function Home() {
   const [searchParams, setSearchParams] = useState({
     make: '',
     model: '',
+    minPrice: '',
     maxPrice: '',
     location: '',
   });
@@ -61,6 +62,7 @@ export default function Home() {
     const params = new URLSearchParams();
     if (searchParams.make) params.append('make', searchParams.make);
     if (searchParams.model) params.append('model', searchParams.model);
+    if (searchParams.minPrice) params.append('minPrice', searchParams.minPrice);
     if (searchParams.maxPrice) params.append('maxPrice', searchParams.maxPrice);
     if (searchParams.location) params.append('location', searchParams.location);
     
@@ -81,7 +83,7 @@ export default function Home() {
 
         {/* Search Form */}
         <form onSubmit={handleSearch} className="bg-white text-gray-900 p-6 rounded-lg max-w-2xl border border-indigo-900">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <select
               value={searchParams.make}
               onChange={(e) => handleMakeChange(e.target.value)}
@@ -107,17 +109,10 @@ export default function Home() {
                 </option>
               ))}
             </select>
-            <input
-              type="number"
-              placeholder="Max Price (€)"
-              value={searchParams.maxPrice}
-              onChange={(e) => setSearchParams({ ...searchParams, maxPrice: e.target.value })}
-              className="input-field"
-            />
             <select
               value={searchParams.location}
               onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-              className="input-field"
+              className="input-field md:col-span-2"
             >
               <option value="">Select County</option>
               {IRISH_COUNTIES.map((county) => (
@@ -127,6 +122,65 @@ export default function Home() {
               ))}
             </select>
           </div>
+
+          {/* Price Range Slider */}
+          <div className="mb-6">
+            <label className="block text-gray-700 font-semibold mb-3">
+              Price Range: €{(parseInt(searchParams.minPrice) || 0).toLocaleString()} - €{(parseInt(searchParams.maxPrice) || 100000).toLocaleString()}
+            </label>
+            <div className="relative pt-1 pb-8">
+              <div className="relative h-2 bg-gray-200 rounded-lg">
+                {/* Range track between thumbs */}
+                <div 
+                  className="absolute h-2 bg-indigo-950 rounded-lg"
+                  style={{
+                    left: `${((parseInt(searchParams.minPrice) || 0) / 100000) * 100}%`,
+                    right: `${100 - ((parseInt(searchParams.maxPrice) || 100000) / 100000) * 100}%`
+                  }}
+                />
+                {/* Min slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100000"
+                  step="1000"
+                  value={searchParams.minPrice || '0'}
+                  onChange={(e) => {
+                    const newMin = parseInt(e.target.value);
+                    const currentMax = parseInt(searchParams.maxPrice) || 100000;
+                    if (newMin <= currentMax) {
+                      setSearchParams({ ...searchParams, minPrice: e.target.value });
+                    }
+                  }}
+                  className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto"
+                />
+                {/* Max slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100000"
+                  step="1000"
+                  value={searchParams.maxPrice || '100000'}
+                  onChange={(e) => {
+                    const newMax = parseInt(e.target.value);
+                    const currentMin = parseInt(searchParams.minPrice) || 0;
+                    if (newMax >= currentMin) {
+                      setSearchParams({ ...searchParams, maxPrice: e.target.value });
+                    }
+                  }}
+                  className="absolute w-full h-2 appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>€0</span>
+                <span>€25k</span>
+                <span>€50k</span>
+                <span>€75k</span>
+                <span>€100k</span>
+              </div>
+            </div>
+          </div>
+
           <button
             type="submit"
             className="w-full bg-indigo-950 text-white p-3 rounded font-bold hover:bg-indigo-950 transition shadow-lg"
