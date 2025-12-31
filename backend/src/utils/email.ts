@@ -90,7 +90,7 @@ export async function sendMessageNotification({
 }
 
 // Generic email sending function for contact forms, etc.
-export async function sendEmail(to: string, subject: string, html: string) {
+export async function sendEmail(to: string | string[], subject: string, html: string) {
   if (!process.env.RESEND_API_KEY) {
     console.warn('RESEND_API_KEY not configured, skipping email');
     return null;

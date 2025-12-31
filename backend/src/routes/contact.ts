@@ -31,9 +31,9 @@ router.post('/', async (req: Request, res: Response) => {
       <p>${message.replace(/\n/g, '<br>')}</p>
     `;
 
-    // Send to admin email (you can change this to your preferred email)
+    // Send to admin emails
     await sendEmail(
-      'support@i-deal.ie', // or process.env.ADMIN_EMAIL
+      ['tonyrenehan@gmail.com', 'farrellj18@gmail.com'],
       emailSubject,
       emailBody
     );
