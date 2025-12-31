@@ -51,7 +51,7 @@ export default function RootLayout({
                 <h3 className="font-bold text-white mb-4">About</h3>
                 <ul className="space-y-2">
                   <li><a href="#" className="hover:text-white transition">About Us</a></li>
-                  <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                  <li><a href="/contact" className="hover:text-white transition">Contact</a></li>
                   <li><a href="#" className="hover:text-white transition">Blog</a></li>
                 </ul>
               </div>

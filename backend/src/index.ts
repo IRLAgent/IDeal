@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import carRoutes from './routes/cars';
 import messageRoutes from './routes/messages';
 import uploadRoutes from './routes/upload';
+import contactRoutes from './routes/contact';
 
 // Debug: Log environment variable status at startup
 console.log('🚀 Starting IDeal.ie Backend API');
@@ -55,6 +56,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/cars', carRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/contact', contactRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -82,6 +84,7 @@ app.listen(PORT, () => {
 ║      - /api/auth (register, login)    ║
 ║      - /api/cars (list, create)       ║
 ║      - /api/messages (send, receive)  ║
+║      - /api/contact (contact form)    ║
 ╚════════════════════════════════════════╝
   `);
 });
