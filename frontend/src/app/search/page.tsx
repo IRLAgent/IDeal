@@ -34,6 +34,8 @@ function SearchContent() {
     fuelType: '',
   });
   const [cars, setCars] = useState<Car[]>([]);
+  const [availableMakes, setAvailableMakes] = useState<string[]>([]);
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(true);
@@ -69,11 +71,47 @@ function SearchContent() {
 
   useEffect(() => {
     fetchCars();
+    fetchAvailableMakes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (filters.make) {
+      fetchAvailableModels(filters.make);
+    } else {
+      setAvailableModels([]);
+    }
+  }, [filters.make]);
+
+  const fetchAvailableMakes = async () => {
+    try {
+      const response = await apiCall<{ makes: string[] }>('/cars/available/makes', {
+        method: 'GET',
+      });
+      setAvailableMakes(response.makes);
+    } catch (err) {
+      console.error('Failed to fetch available makes:', err);
+    }
+  };
+
+  const fetchAvailableModels = async (make: string) => {
+    try {
+      const response = await apiCall<{ models: string[] }>(`/cars/available/models?make=${make}`, {
+        method: 'GET',
+      });
+      setAvailableModels(response.models);
+    } catch (err) {
+      console.error('Failed to fetch available models:', err);
+    }
+  };
+
   const handleFilterChange = (field: string, value: string) => {
-    setFilters({ ...filters, [field]: value });
+    if (field === 'make') {
+      // Reset model when make changes
+      setFilters({ ...filters, make: value, model: '' });
+    } else {
+      setFilters({ ...filters, [field]: value });
+    }
   };
 
   const handleApplyFilters = () => {
@@ -115,10 +153,28 @@ function SearchContent() {
                   className="w-full p-2 border border-gray-300 rounded"
                 >
                   <option value="">All Makes</option>
-                  <option value="BMW">BMW</option>
-                  <option value="Ford">Ford</option>
-                  <option value="Mercedes">Mercedes</option>
-                  <option value="Audi">Audi</option>
+                  {availableMakes.map((make) => (
+                    <option key={make} value={make}>
+                      {make}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">Model</label>
+                <select
+                  value={filters.model}
+                  onChange={(e) => handleFilterChange('model', e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  disabled={!filters.make}
+                >
+                  <option value="">All Models</option>
+                  {availableModels.map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
                 </select>
               </div>
 

@@ -6,12 +6,9 @@ import Link from 'next/link';
 import { apiCallAuth } from '@/lib/api';
 import { isAuthenticated, getAuthToken } from '@/lib/auth';
 import { IRISH_COUNTIES } from '@/constants/counties';
+import { CAR_MAKES, getModelsForMake, FUEL_TYPES, TRANSMISSIONS } from '@/constants/carData';
 
 export const dynamic = 'force-dynamic';
-
-const CAR_MAKES = ['BMW', 'Ford', 'Mercedes', 'Audi', 'Volkswagen', 'Toyota', 'Hyundai', 'Peugeot', 'Renault', 'Nissan', 'Vauxhall', 'Citroën'];
-const FUEL_TYPES = ['Petrol', 'Diesel', 'Hybrid', 'Electric'];
-const TRANSMISSIONS = ['Manual', 'Automatic'];
 
 export default function CreateListingPage() {
   const router = useRouter();
@@ -28,6 +25,7 @@ export default function CreateListingPage() {
     description: '',
   });
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -42,10 +40,22 @@ export default function CreateListingPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: name === 'year' || name === 'price' || name === 'mileage' ? parseInt(value) || '' : value,
-    });
+    
+    // If make changes, update available models and reset model
+    if (name === 'make') {
+      const models = getModelsForMake(value);
+      setAvailableModels(models);
+      setFormData({
+        ...formData,
+        make: value,
+        model: '', // Reset model when make changes
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: name === 'year' || name === 'price' || name === 'mileage' ? parseInt(value) || '' : value,
+      });
+    }
   };
 
   const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,15 +197,32 @@ export default function CreateListingPage() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Model <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  name="model"
-                  value={formData.model}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 3 Series, Focus, A4"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
-                  required
-                />
+                {formData.make ? (
+                  <select
+                    name="model"
+                    value={formData.model}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-950"
+                    required
+                  >
+                    <option value="">Select Model</option>
+                    {availableModels.map((model) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                    <option value="Other">Other</option>
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    name="model"
+                    value={formData.model}
+                    disabled
+                    placeholder="Select a make first"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
+                  />
+                )}
               </div>
             </div>
 

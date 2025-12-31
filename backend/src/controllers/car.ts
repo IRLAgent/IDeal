@@ -101,4 +101,27 @@ export class CarController {
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  static async getAvailableMakes() {
+    const cars = await prisma.car.findMany({
+      where: { status: 'active' },
+      select: { make: true },
+      distinct: ['make'],
+      orderBy: { make: 'asc' },
+    });
+    return cars.map(car => car.make);
+  }
+
+  static async getAvailableModels(make?: string) {
+    const cars = await prisma.car.findMany({
+      where: { 
+        status: 'active',
+        make: make || undefined,
+      },
+      select: { model: true },
+      distinct: ['model'],
+      orderBy: { model: 'asc' },
+    });
+    return cars.map(car => car.model);
+  }
 }

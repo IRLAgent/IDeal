@@ -4,6 +4,27 @@ import { AuthRequest, authMiddleware } from '../middleware/auth';
 
 const router = Router();
 
+// Get available makes (public)
+router.get('/available/makes', async (req: AuthRequest, res: Response) => {
+  try {
+    const makes = await CarController.getAvailableMakes();
+    res.json({ makes });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get available models (public)
+router.get('/available/models', async (req: AuthRequest, res: Response) => {
+  try {
+    const { make } = req.query;
+    const models = await CarController.getAvailableModels(make as string);
+    res.json({ models });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get all cars (public)
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
