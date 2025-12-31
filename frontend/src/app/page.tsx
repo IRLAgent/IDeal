@@ -1,20 +1,71 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { IRISH_COUNTIES } from '@/constants/counties';
+import { apiCall } from '@/lib/api';
 
 export default function Home() {
+  const router = useRouter();
   const [searchParams, setSearchParams] = useState({
     make: '',
     model: '',
     maxPrice: '',
     location: '',
   });
+  const [availableMakes, setAvailableMakes] = useState<string[]>([]);
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchAvailableMakes();
+  }, []);
+
+  useEffect(() => {
+    if (searchParams.make) {
+      fetchAvailableModels(searchParams.make);
+    } else {
+      setAvailableModels([]);
+    }
+  }, [searchParams.make]);
+
+  const fetchAvailableMakes = async () => {
+    try {
+      const response = await apiCall<{ makes: string[] }>('/cars/available/makes', {
+        method: 'GET',
+      });
+      setAvailableMakes(response.makes);
+    } catch (err) {
+      console.error('Failed to fetch available makes:', err);
+    }
+  };
+
+  const fetchAvailableModels = async (make: string) => {
+    try {
+      const response = await apiCall<{ models: string[] }>(`/cars/available/models?make=${make}`, {
+        method: 'GET',
+      });
+      setAvailableModels(response.models);
+    } catch (err) {
+      console.error('Failed to fetch available models:', err);
+    }
+  };
+
+  const handleMakeChange = (make: string) => {
+    setSearchParams({ ...searchParams, make, model: '' });
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement search
-    console.log('Search:', searchParams);
+    
+    // Build query string from search parameters
+    const params = new URLSearchParams();
+    if (searchParams.make) params.append('make', searchParams.make);
+    if (searchParams.model) params.append('model', searchParams.model);
+    if (searchParams.maxPrice) params.append('maxPrice', searchParams.maxPrice);
+    if (searchParams.location) params.append('location', searchParams.location);
+    
+    // Navigate to search page with filters
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
@@ -31,20 +82,31 @@ export default function Home() {
         {/* Search Form */}
         <form onSubmit={handleSearch} className="bg-white text-gray-900 p-6 rounded-lg max-w-2xl border border-indigo-900">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <input
-              type="text"
-              placeholder="Make (e.g., BMW, Ford)"
+            <select
               value={searchParams.make}
-              onChange={(e) => setSearchParams({ ...searchParams, make: e.target.value })}
+              onChange={(e) => handleMakeChange(e.target.value)}
               className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Model (e.g., 3 Series)"
+            >
+              <option value="">Select Make</option>
+              {availableMakes.map((make) => (
+                <option key={make} value={make}>
+                  {make}
+                </option>
+              ))}
+            </select>
+            <select
               value={searchParams.model}
               onChange={(e) => setSearchParams({ ...searchParams, model: e.target.value })}
               className="input-field"
-            />
+              disabled={!searchParams.make}
+            >
+              <option value="">Select Model</option>
+              {availableModels.map((model) => (
+                <option key={model} value={model}>
+                  {model}
+                </option>
+              ))}
+            </select>
             <input
               type="number"
               placeholder="Max Price (€)"

@@ -25,12 +25,13 @@ function SearchContent() {
   const searchParams = useSearchParams();
   const sellerId = searchParams.get('seller');
   
+  // Initialize filters from URL parameters
   const [filters, setFilters] = useState({
-    make: '',
-    model: '',
+    make: searchParams.get('make') || '',
+    model: searchParams.get('model') || '',
     priceMin: '',
-    priceMax: '',
-    location: '',
+    priceMax: searchParams.get('maxPrice') || '',
+    location: searchParams.get('location') || '',
     fuelType: '',
   });
   const [cars, setCars] = useState<Car[]>([]);
