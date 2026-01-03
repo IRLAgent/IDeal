@@ -5,6 +5,7 @@ import "./globals.css";
 import MobileMenu from "@/components/MobileMenu";
 import HeaderNav from "@/components/HeaderNav";
 import UmamiTracker from "@/components/UmamiTracker";
+import ChatBot from "@/components/ChatBot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +44,9 @@ export default function RootLayout({
         </header>
 
         {children}
+
+        {/* AI Chat Assistant */}
+        <ChatBot />
 
         <footer className="bg-indigo-950 text-gray-300 py-12 mt-16 border-t-4 border-indigo-900">
           <div className="max-w-7xl mx-auto px-4">

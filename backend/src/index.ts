@@ -7,6 +7,7 @@ import carRoutes from './routes/cars';
 import messageRoutes from './routes/messages';
 import uploadRoutes from './routes/upload';
 import contactRoutes from './routes/contact';
+import chatRoutes from './routes/chat';
 
 // Debug: Log environment variable status at startup
 console.log('🚀 Starting IDeal.ie Backend API');
@@ -57,6 +58,7 @@ app.use('/api/cars', carRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/chat', chatRoutes);
 
 // 404 handler
 app.use((req, res) => {

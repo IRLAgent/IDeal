@@ -2,8 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { IRISH_COUNTIES } from '@/constants/counties';
 import { apiCall } from '@/lib/api';
+
+interface Car {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  location: string;
+  fuelType: string;
+  transmission: string;
+  photoUrls: string;
+}
 
 export default function Home() {
   const router = useRouter();
@@ -16,9 +30,12 @@ export default function Home() {
   });
   const [availableMakes, setAvailableMakes] = useState<string[]>([]);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [recentCars, setRecentCars] = useState<Car[]>([]);
+  const [isLoadingCars, setIsLoadingCars] = useState(true);
 
   useEffect(() => {
     fetchAvailableMakes();
+    fetchRecentCars();
   }, []);
 
   useEffect(() => {
@@ -48,6 +65,28 @@ export default function Home() {
       setAvailableModels(response.models);
     } catch (err) {
       console.error('Failed to fetch available models:', err);
+    }
+  };
+
+  const fetchRecentCars = async () => {
+    try {
+      setIsLoadingCars(true);
+      const response = await apiCall<Car[]>('/cars?take=8', {
+        method: 'GET',
+      });
+      setRecentCars(response);
+    } catch (err) {
+      console.error('Failed to fetch recent cars:', err);
+    } finally {
+      setIsLoadingCars(false);
+    }
+  };
+
+  const parsePhotoUrls = (photoUrls: string): string[] => {
+    try {
+      return JSON.parse(photoUrls);
+    } catch {
+      return [];
     }
   };
 
@@ -228,20 +267,70 @@ export default function Home() {
       {/* Featured Listings Section */}
       <section>
         <h2 className="text-3xl font-bold mb-8">Recent Listings</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="card overflow-hidden hover:shadow-xl transition cursor-pointer">
-              <div className="w-full h-48 bg-gray-300 rounded mb-4 flex items-center justify-center">
-                <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
+        
+        {isLoadingCars ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+              <div key={item} className="card overflow-hidden animate-pulse">
+                <div className="w-full h-48 bg-gray-300 rounded mb-4"></div>
+                <div className="h-6 bg-gray-300 rounded mb-2 w-3/4"></div>
+                <div className="h-4 bg-gray-300 rounded mb-4 w-full"></div>
+                <div className="h-8 bg-gray-300 rounded w-1/2"></div>
               </div>
-              <h3 className="font-bold text-lg mb-2">Car Make & Model</h3>
-              <p className="text-gray-600 mb-4">2020 | 50,000 km | Location</p>
-              <p className="text-2xl font-bold text-indigo-950">€15,990</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : recentCars.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {recentCars.map((car) => {
+              const photos = parsePhotoUrls(car.photoUrls);
+              return (
+                <Link 
+                  key={car.id} 
+                  href={`/listing/${car.id}`}
+                  className="card overflow-hidden hover:shadow-xl transition cursor-pointer group"
+                >
+                  <div className="w-full h-48 bg-gray-200 rounded mb-4 overflow-hidden">
+                    {photos[0] ? (
+                      <img 
+                        src={photos[0]} 
+                        alt={`${car.make} ${car.model}`}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-300">
+                        <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900 group-hover:text-indigo-950 transition">
+                    {car.year} {car.make} {car.model}
+                  </h3>
+                  <p className="text-gray-600 mb-2 text-sm">
+                    {car.mileage.toLocaleString()} km • {car.fuelType} • {car.transmission}
+                  </p>
+                  {car.location && (
+                    <p className="text-gray-500 text-sm mb-3">📍 {car.location}</p>
+                  )}
+                  <p className="text-2xl font-bold text-indigo-950">
+                    €{car.price.toLocaleString()}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-gray-500">
+            <p className="text-xl mb-4">No listings available yet.</p>
+            <Link 
+              href="/listing/create"
+              className="inline-block bg-indigo-950 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-900 transition"
+            >
+              Be the first to list a car
+            </Link>
+          </div>
+        )}
       </section>
     </main>
   );
