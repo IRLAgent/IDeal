@@ -9,12 +9,10 @@ async function listModels() {
     console.log('🔍 Checking API Key:', process.env.GEMINI_API_KEY ? '✓ Set' : '✗ Missing');
     console.log('');
     
-    // Try the most common models
+    // Try all possible model names for 2025-2026
     const modelsToTry = [
-      'gemini-pro',
-      'gemini-1.5-pro',
-      'gemini-1.5-flash',
-      'gemini-1.0-pro',
+      'gemini-2.5-flash-lite',
+      'gemini-2.5-flash',
     ];
 
     console.log('Testing models...\n');
@@ -26,7 +24,16 @@ async function listModels() {
         const response = await result.response;
         console.log(`✅ ${modelName} - WORKS!`);
       } catch (error) {
-        console.log(`❌ ${modelName} - ${error.message}`);
+        const errorMsg = error.message;
+        if (errorMsg.includes('API key not valid')) {
+          console.log(`❌ ${modelName} - API KEY NOT VALID`);
+        } else if (errorMsg.includes('429')) {
+          console.log(`❌ ${modelName} - QUOTA EXCEEDED`);
+        } else if (errorMsg.includes('404')) {
+          console.log(`❌ ${modelName} - MODEL NOT FOUND`);
+        } else {
+          console.log(`❌ ${modelName} - ${errorMsg.substring(0, 80)}...`);
+        }
       }
     }
   } catch (error) {

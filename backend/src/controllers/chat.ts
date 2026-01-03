@@ -28,7 +28,7 @@ export class ChatController {
         throw new Error('GEMINI_API_KEY not configured');
       }
 
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
       // Build conversation context
       const conversationContext = conversationHistory

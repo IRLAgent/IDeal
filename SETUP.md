@@ -303,6 +303,36 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 
 ---
 
+## 🤖 AI Chatbot Setup (Optional)
+
+The site includes an AI-powered chatbot that helps users find cars using natural language. It uses Google Gemini (free tier).
+
+### Get Gemini API Key
+
+1. Visit: https://aistudio.google.com/app/apikey
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the key (starts with `AIza...`)
+
+### Configure Backend
+
+Add to `backend/.env`:
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+The chatbot will automatically appear on all pages as a floating button. Users can ask things like:
+- "I need a family car under €15,000"
+- "Looking for an economical diesel for commuting"
+- "Show me SUVs less than 5 years old"
+
+**Free Tier Limits:**
+- 15 requests/minute
+- 1,500 requests/day
+- Perfect for MVP testing
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Frontend won't start
